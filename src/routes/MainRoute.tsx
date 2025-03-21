@@ -12,7 +12,7 @@ function MainRoute() {
 				<Route path="/" element={<MainPage />} />
 				<Route path="/new-post" element={<NewPostPage />} />
 				<Route path="/post/:id" element={<PostPage />} />
-				<Route path="/login" element={<LoginPage />} />
+				<Route path="login" element={<LoginPage />} />
 			</Routes>
 		</>
 	);
