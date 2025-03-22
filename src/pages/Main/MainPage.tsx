@@ -8,12 +8,14 @@ import GoogleMapComponent from "../../components/GoogleMap/GoogleMapComponent";
 import SideBarComponent from "../../components/SideBar/SideBarComponent";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
+import PhotoUploadModalComponent from "../../components/PhotoUploadModalComponent/PhotoUploadModalComponent";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+	const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
 	const menuRef = useRef<HTMLDivElement>(null);
 
@@ -62,10 +64,19 @@ function MainPage() {
 				</button>
 				{/* 추가 메뉴 (애니메이션 포함) */}
 				<div css={s.menuWrapper(isMenuOpen)}>
-					<button css={s.menuItem}>📷 사진 업로드</button>
+					<button
+						css={s.menuItem}
+						onClick={() => setIsUploadModalOpen(true)}
+					>
+						📷 사진 업로드
+					</button>
 					<button css={s.menuItem}>📝 일정 업로드</button>
 				</div>
 			</div>
+			<PhotoUploadModalComponent
+				isOpen={isUploadModalOpen}
+				onClose={() => setIsUploadModalOpen(false)}
+			/>
 			{isLoginOpen && (
 				<LoginModalComponent
 					isOpen={isLoginOpen}
