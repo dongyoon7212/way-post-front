@@ -4,17 +4,17 @@ import * as s from "./style";
 import { IoCloseOutline } from "react-icons/io5";
 import { BsFire } from "react-icons/bs";
 import { MdOutlineFiberNew } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
 function SideBarComponent({
 	isOpen,
 	onClose,
+	onLogin,
 }: {
 	isOpen: boolean;
 	onClose: () => void;
+	onLogin: () => void;
 }) {
 	const sidebarRef = useRef<HTMLDivElement>(null);
-	const navigate = useNavigate();
 	// 사이드바 외부 클릭 감지
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +58,7 @@ function SideBarComponent({
 					</li>
 				</ul>
 			</nav>
-			<button css={s.loginBtn} onClick={() => navigate("/login")}>
+			<button css={s.loginBtn} onClick={onLogin}>
 				로그인
 			</button>
 		</div>

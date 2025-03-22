@@ -75,13 +75,13 @@ export const loginBtn = css`
 	box-sizing: border-box;
 	border: none;
 	border-top: 1px solid #dbdbdb;
-	color: black;
-	background-color: transparent;
+	color: white;
+	background-color: #64afff;
 	font-size: 16px;
 	cursor: pointer;
 	transition: background 0.2s ease-in-out;
 
 	&:hover {
-		background: #dbdbdb;
+		background: #187bcd;
 	}
 `;

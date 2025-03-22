@@ -6,11 +6,15 @@ import { TbWorldSearch } from "react-icons/tb";
 import { FaPlus } from "react-icons/fa6";
 import GoogleMapComponent from "../../components/GoogleMap/GoogleMapComponent";
 import SideBarComponent from "../../components/SideBar/SideBarComponent";
-import { Outlet } from "react-router-dom";
+import LoginModalComponent from "../../components/Login/LoginModalComponent";
+import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
+	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	// 바깥 클릭 시 메뉴 닫기
@@ -38,6 +42,7 @@ function MainPage() {
 			<SideBarComponent
 				isOpen={isSidebarOpen}
 				onClose={() => setIsSidebarOpen(false)}
+				onLogin={() => setIsLoginOpen(true)}
 			/>
 			<GoogleMapComponent />
 			<button css={s.sidebarBtn} onClick={() => setIsSidebarOpen(true)}>
@@ -61,6 +66,21 @@ function MainPage() {
 					<button css={s.menuItem}>📝 일정 업로드</button>
 				</div>
 			</div>
+			{isLoginOpen && (
+				<LoginModalComponent
+					isOpen={isLoginOpen}
+					onClose={() => setIsLoginOpen(false)}
+					onSignUpOpen={() => {
+						setIsLoginOpen(false);
+						setIsSignUpOpen(true);
+					}}
+				/>
+			)}
+			<SignUpModalComponent
+				isOpen={isSignUpOpen}
+				onClose={() => setIsSignUpOpen(false)}
+				onLoginOpen={() => setIsLoginOpen(true)}
+			/>
 		</div>
 	);
 }
