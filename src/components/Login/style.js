@@ -95,13 +95,13 @@ export const buttonGroup = css`
 		width: 100%; /* 인풋과 동일한 너비 */
 		transition: background-color 0.2s;
 
-		&:nth-child(1) {
+		&:nth-of-type(1) {
 			background-color: #1e90ff;
 			color: white;
 			border: none;
 		}
 
-		&:nth-child(1):hover {
+		&:nth-of-type(1):hover {
 			background-color: #187bcd;
 		}
 	}

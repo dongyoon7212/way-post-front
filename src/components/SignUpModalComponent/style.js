@@ -41,6 +41,10 @@ export const modal = css`
 		font-size: 20px;
 		margin-bottom: 15px;
 	}
+
+	& > p {
+		margin-bottom: 15px;
+	}
 `;
 
 export const closeBtn = css`
@@ -98,6 +102,43 @@ export const inputBox = css`
 	}
 `;
 
+export const inputWrapper = css`
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	align-items: center;
+`;
+
+export const chkInput = css`
+	width: 100%;
+	padding: 12px 85px 12px 12px; /* 오른쪽 패딩 추가 */
+	border: 1px solid #ccc;
+	border-radius: 15px;
+	font-size: 16px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+`;
+
+export const checkBtn = css`
+	position: absolute;
+	top: 42%;
+	right: 10px;
+	transform: translateY(-50%);
+	padding: 5px 10px;
+	border: none;
+	background-color: #1e90ff;
+	color: white;
+	font-size: 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+
+	&:hover {
+		background-color: #0073e6;
+	}
+`;
+
 export const submitBtn = css`
 	width: 100%;
 	padding: 10px;
@@ -108,10 +149,10 @@ export const submitBtn = css`
 	font-size: 16px;
 	cursor: pointer;
 	margin: 10px 0;
-	transition: background 0.2s;
+	transition: background-color 0.2s;
 
 	&:hover {
-		background: #0f70d6;
+		background-color: #0f70d6;
 	}
 `;
 
