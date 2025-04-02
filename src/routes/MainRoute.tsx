@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "../pages/Main/MainPage";
-import NewPostPage from "../pages/NewPostPage";
-import PostPage from "../pages/PostPage";
+import NewPostPage from "../pages/NewPost/NewPostPage";
+import PostPage from "../pages/Post/PostPage";
 
 function MainRoute() {
 	return (

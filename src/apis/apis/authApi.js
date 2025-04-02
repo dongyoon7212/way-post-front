@@ -1,5 +1,14 @@
 import { instance } from "../utils/instance";
 
+export const getPrincipal = async () => {
+	try {
+		const response = instance.get("/auth/principal");
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
 export const signupRequest = async (data) => {
 	try {
 		const response = instance.post("/auth/signup", data);

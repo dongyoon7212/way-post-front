@@ -3,12 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { TbWorldSearch } from "react-icons/tb";
+import { BsPersonFill } from "react-icons/bs";
+import { IoMdLogIn } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import GoogleMapComponent from "../../components/GoogleMap/GoogleMapComponent";
 import SideBarComponent from "../../components/SideBar/SideBarComponent";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 import PhotoUploadModalComponent from "../../components/PhotoUploadModalComponent/PhotoUploadModalComponent";
+import { useQueryClient } from "@tanstack/react-query";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,6 +19,9 @@ function MainPage() {
 	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+	const queryClient = useQueryClient();
+	const principalData = queryClient.getQueryData(["getPrincipal"]);
 
 	const menuRef = useRef<HTMLDivElement>(null);
 
@@ -54,6 +60,9 @@ function MainPage() {
 				<input type="text" />
 				{/* <TbWorldSearch /> */}
 			</div>
+			<button css={s.profileBtn}>
+				{principalData ? <BsPersonFill /> : <IoMdLogIn />}
+			</button>
 			<div css={s.addPostContainer} ref={menuRef}>
 				{/* 플러스 버튼 */}
 				<button

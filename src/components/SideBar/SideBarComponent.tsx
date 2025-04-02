@@ -4,6 +4,8 @@ import * as s from "./style";
 import { IoCloseOutline } from "react-icons/io5";
 import { BsFire } from "react-icons/bs";
 import { MdOutlineFiberNew } from "react-icons/md";
+import { useQueryClient } from "@tanstack/react-query";
+import { instance } from "../../apis/utils/instance";
 
 function SideBarComponent({
 	isOpen,
@@ -14,6 +16,9 @@ function SideBarComponent({
 	onClose: () => void;
 	onLogin: () => void;
 }) {
+	const queryClient = useQueryClient();
+	const principalData = queryClient.getQueryData(["getPrincipal"]);
+
 	const sidebarRef = useRef<HTMLDivElement>(null);
 	// 사이드바 외부 클릭 감지
 	useEffect(() => {
@@ -37,6 +42,17 @@ function SideBarComponent({
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
 	}, [isOpen, onClose]);
+
+	const handleLogoutClick = () => {
+		localStorage.removeItem("accessToken");
+		instance.interceptors.request.use((config) => {
+			config.headers.Authorization = null;
+			return config;
+		});
+		queryClient.refetchQueries({ queryKey: ["getPrincipal"] });
+		alert("로그아웃 되었습니다.");
+		window.location.href = "/";
+	};
 	return (
 		<div ref={sidebarRef} css={s.layout(isOpen)}>
 			<button onClick={onClose} css={s.closeBtn}>
@@ -58,8 +74,11 @@ function SideBarComponent({
 					</li>
 				</ul>
 			</nav>
-			<button css={s.loginBtn} onClick={onLogin}>
-				로그인
+			<button
+				css={s.loginBtn}
+				onClick={principalData ? handleLogoutClick : onLogin}
+			>
+				{principalData ? "로그아웃" : "로그인"}
 			</button>
 		</div>
 	);
