@@ -12,6 +12,7 @@ import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 import PhotoUploadModalComponent from "../../components/PhotoUploadModalComponent/PhotoUploadModalComponent";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +20,7 @@ function MainPage() {
 	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-
+	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData(["getPrincipal"]);
 
@@ -60,18 +61,25 @@ function MainPage() {
 				<input type="text" />
 				{/* <TbWorldSearch /> */}
 			</div>
-			<button css={s.profileBtn}>
+			<button
+				css={s.profileBtn}
+				onClick={
+					principalData
+						? () => {
+								navigate("/profile");
+						  }
+						: () => setIsLoginOpen(true)
+				}
+			>
 				{principalData ? <BsPersonFill /> : <IoMdLogIn />}
 			</button>
 			<div css={s.addPostContainer} ref={menuRef}>
-				{/* 플러스 버튼 */}
 				<button
 					css={s.addPostBtn}
 					onClick={() => setIsMenuOpen(!isMenuOpen)}
 				>
 					<FaPlus />
 				</button>
-				{/* 추가 메뉴 (애니메이션 포함) */}
 				<div css={s.menuWrapper(isMenuOpen)}>
 					<button
 						css={s.menuItem}
