@@ -20,11 +20,19 @@ function MainPage() {
 	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+	const [markerPosition, setMarkerPosition] = useState<{
+		lat: number;
+		lng: number;
+	} | null>(null);
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData(["getPrincipal"]);
 
 	const menuRef = useRef<HTMLDivElement>(null);
+
+	const handleMetaDataExtracted = (lat: number, lng: number) => {
+		setMarkerPosition({ lat, lng });
+	};
 
 	// 바깥 클릭 시 메뉴 닫기
 	useEffect(() => {
@@ -53,7 +61,7 @@ function MainPage() {
 				onClose={() => setIsSidebarOpen(false)}
 				onLogin={() => setIsLoginOpen(true)}
 			/>
-			<GoogleMapComponent />
+			<GoogleMapComponent markerPosition={markerPosition} />
 			<button css={s.sidebarBtn} onClick={() => setIsSidebarOpen(true)}>
 				<LuAlignJustify />
 			</button>
@@ -93,6 +101,7 @@ function MainPage() {
 			<PhotoUploadModalComponent
 				isOpen={isUploadModalOpen}
 				onClose={() => setIsUploadModalOpen(false)}
+				onMetaDataExtracted={handleMetaDataExtracted}
 			/>
 			{isLoginOpen && (
 				<LoginModalComponent

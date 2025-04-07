@@ -44,7 +44,6 @@ export const menu = css`
 
 export const contentLayout = css`
 	width: 70vw;
-	background-color: #fafafa;
 `;
 
 export const infoLayout = css`
@@ -136,4 +135,20 @@ export const introduce = css`
 
 export const postLayout = css`
 	width: 100%;
+	padding-bottom: 50px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* 3열 그리드 */
+	grid-gap: 5px; /* 그리드 간격 */
+`;
+
+export const postBox = css`
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+
+	& > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
 `;

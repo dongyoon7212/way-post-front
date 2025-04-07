@@ -16,6 +16,7 @@ export const modalWrapper = (isOpen) => css`
 	z-index: 1001;
 	border-radius: 20px;
 	box-sizing: border-box;
+	overflow: auto;
 `;
 
 export const closeButton = css`
@@ -35,25 +36,63 @@ export const contentWrapper = css`
 `;
 
 export const uploadButton = css`
-	width: 80%;
+	width: 22vw;
+	height: 22vw;
 	padding: 10px;
-	background-color: #1e90ff;
+	cursor: pointer;
+	font-size: 150px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+export const fileInput = css`
+	display: none;
+`;
+
+export const textInput = css`
+	width: 90%;
+	min-height: 100px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	resize: none;
+	outline: none;
+	font-size: 14px;
+`;
+
+export const postBtn = css`
+	padding: 10px 20px;
+	margin-top: 100px;
+	background-color: #007bff;
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 14px;
+`;
 
-	&:hover {
-		background-color: #1c7ed6;
+export const previewContainer = css`
+	width: 90%;
+
+	& > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
 	}
 `;
 
-export const textInput = css`
-	width: 80%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	outline: none;
-	font-size: 16px;
+export const metadataContainer = css`
+	width: 90%;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-top: 10px;
+
+	& > div {
+		& > p {
+			font-size: 12px;
+		}
+	}
 `;
