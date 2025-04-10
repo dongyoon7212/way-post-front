@@ -77,7 +77,6 @@ function MainPage() {
 				</button>
 				<div css={s.searchBox}>
 					<input type="text" />
-					{/* <TbWorldSearch /> */}
 				</div>
 				<button
 					css={s.profileBtn}
@@ -101,7 +100,14 @@ function MainPage() {
 					<div css={s.menuWrapper(isMenuOpen)}>
 						<button
 							css={s.menuItem}
-							onClick={() => setIsUploadModalOpen(true)}
+							onClick={() => {
+								if (principalData) {
+									setIsUploadModalOpen(true);
+								} else{
+									alert("로그인 후 사용 가능합니다.");
+									setIsLoginOpen(true);
+								}
+							}}
 						>
 							📷 사진 업로드
 						</button>
