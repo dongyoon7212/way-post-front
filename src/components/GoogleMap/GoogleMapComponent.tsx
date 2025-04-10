@@ -1,4 +1,4 @@
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import React, { useEffect, useState, useCallback } from "react";
 
 const containerStyle = {
@@ -8,9 +8,13 @@ const containerStyle = {
 
 interface GoogleMapProps {
 	markerPosition: { lat: number; lng: number } | null;
+	upLoadModalOpen: boolean;
 }
 
-function GoogleMapComponent({ markerPosition }: GoogleMapProps) {
+function GoogleMapComponent({
+	markerPosition,
+	upLoadModalOpen,
+}: GoogleMapProps) {
 	const [currentLocation, setCurrentLocation] = useState({
 		lat: 37.5665,
 		lng: 126.978,
@@ -45,27 +49,25 @@ function GoogleMapComponent({ markerPosition }: GoogleMapProps) {
 			map.panTo(markerPosition);
 			// 모달이 화면 오른쪽 35%를 가린다면, 지도 중심을 왼쪽으로 이동해야 함.
 			// 예를 들어, 화면 너비의 약 17.5% 정도(35%의 절반)를 왼쪽으로 이동시키는 오프셋
-			map.panBy(+window.innerWidth * 0.175, 0);
+			if (upLoadModalOpen) {
+				map.panBy(+window.innerWidth * 0.175, 0);
+			}
 		}
-	}, [map, markerPosition]);
+	}, [map, markerPosition, upLoadModalOpen]);
 
 	const mapCenter = markerPosition || currentLocation;
 
 	return (
-		<LoadScript
-			googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY!}
+		<GoogleMap
+			mapContainerStyle={containerStyle}
+			center={mapCenter}
+			zoom={12}
+			options={{ disableDefaultUI: true }}
+			onLoad={onLoad}
 		>
-			<GoogleMap
-				mapContainerStyle={containerStyle}
-				center={mapCenter}
-				zoom={12}
-				options={{ disableDefaultUI: true }}
-				onLoad={onLoad}
-			>
-				{/* 현재 위치 마커 */}
-				<Marker position={mapCenter} />
-			</GoogleMap>
-		</LoadScript>
+			{/* 현재 위치 마커 */}
+			<Marker position={mapCenter} />
+		</GoogleMap>
 	);
 }
 
