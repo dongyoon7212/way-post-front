@@ -1,11 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useRef, useState } from "react";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import * as s from "./style";
 import exifr from "exifr";
-import { Metadata } from "../../types";
+import { v4 as uuid } from "uuid";
+import { Metadata, principalData } from "../../types";
 import LocationSearch, {
 	LocationSearchRef,
 } from "../LocationSearch/LocationSearch";
+import { storage } from "../../apis/firebase/firebaseConfig";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
 	isOpen: boolean;
@@ -28,8 +32,14 @@ function PhotoUploadModalComponent({
 		longitude: "",
 	});
 	const [address, setAddress] = useState<string>("");
+	const [isUploading, setIsUploading] = useState(false);
+	const [uploadProgress, setUploadProgress] = useState(0);
 	const locationSearchRef = useRef<LocationSearchRef>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const principalQueryState = useQueryClient().getQueryState<principalData>([
+		"getPrincipal",
+	]);
 
 	// 파일 선택 시 호출되는 핸들러
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,23 +101,53 @@ function PhotoUploadModalComponent({
 		}));
 	};
 
-	// 업로드 버튼 클릭 시 파일 선택창을 띄우는 함수
+	// 파일 업로드 버튼 클릭 핸들러
 	const handleUploadButtonClick = () => {
-		// 숨겨진 파일 input을 프로그래밍 방식으로 클릭
 		fileInputRef.current?.click();
 	};
 
+	// 게시물 최종 업로드
 	const postHandler = () => {
-		// (선택) 실제 업로드 로직
 		if (!selectedFile) {
 			alert("파일을 선택해 주세요.");
 			return;
 		}
+		const storageRef = ref(
+			storage,
+			`post-img/${uuid()}_${selectedFile.name}`
+		);
+		setIsUploading(true);
+		const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
-		console.log("업로드할 데이터:", selectedFile, postText);
-		// 여기에 파일 업로드 로직을 추가합니다.
-		alert("사진 업로드 성공!");
-		onClose();
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				// 업로드 진행률(%) 계산
+				const progress =
+					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				setUploadProgress(progress);
+			},
+			(error) => {
+				console.error("업로드 에러:", error);
+				setIsUploading(false);
+			},
+			() => {
+				// 업로드 완료 후 URL 가져오기
+				getDownloadURL(storageRef).then((url) => {
+					console.log(
+						"업로드할 데이터:",
+						principalQueryState?.data?.data.user.userId,
+						postText,
+						url,
+						metadata ? metadata : manualMetadata,
+						address
+					);
+					setIsUploading(false);
+					alert("사진 업로드 성공!");
+					onClose();
+				});
+			}
+		);
 	};
 
 	const resetState = () => {
@@ -229,7 +269,11 @@ function PhotoUploadModalComponent({
 						취소
 					</button>
 					<button onClick={postHandler} css={s.postBtn}>
-						게시
+						{isUploading ? (
+							<p>업로드 중... {Math.round(uploadProgress)}%</p>
+						) : (
+							<p>업로드</p>
+						)}
 					</button>
 				</div>
 			</div>
