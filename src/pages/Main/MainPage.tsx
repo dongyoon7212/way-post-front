@@ -13,6 +13,7 @@ import PhotoUploadModalComponent from "../../components/PhotoUploadModalComponen
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { LoadScript } from "@react-google-maps/api";
+import { Library } from "@googlemaps/js-api-loader";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -54,11 +55,13 @@ function MainPage() {
 		};
 	}, [isMenuOpen]);
 
+	const libraries: Library[] = ["places"];
+
 	return (
 		<div css={s.layout}>
 			<LoadScript
 				googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY!}
-				libraries={["places"]} // 필수 prop 추가
+				libraries={libraries} // 필수 prop 추가
 			>
 				<SideBarComponent
 					isOpen={isSidebarOpen}
@@ -103,7 +106,7 @@ function MainPage() {
 							onClick={() => {
 								if (principalData) {
 									setIsUploadModalOpen(true);
-								} else{
+								} else {
 									alert("로그인 후 사용 가능합니다.");
 									setIsLoginOpen(true);
 								}

@@ -10,6 +10,7 @@ import LocationSearch, {
 } from "../LocationSearch/LocationSearch";
 import { storage } from "../../apis/firebase/firebaseConfig";
 import { useQueryClient } from "@tanstack/react-query";
+import { photoPostUpload } from "../../apis/apis/postApi";
 
 interface Props {
 	isOpen: boolean;
@@ -53,8 +54,8 @@ function PhotoUploadModalComponent({
 			try {
 				// exifr를 사용해 메타데이터 추출
 				const meta = await exifr.parse(file);
-				setMetadata(meta);
 				if (meta && meta.latitude && meta.longitude) {
+					setMetadata(meta);
 					onMetaDataExtracted(meta.latitude, meta.longitude);
 					// metadata가 있고, latitude와 longitude 값이 있을 때
 					const geocoder = new google.maps.Geocoder();
@@ -68,7 +69,6 @@ function PhotoUploadModalComponent({
 						(results, status) => {
 							// 주소 저장
 							if (status === "OK" && results && results[1]) {
-								console.log(results);
 								const address = results[1].formatted_address;
 								setAddress(address);
 							} else {
@@ -117,6 +117,7 @@ function PhotoUploadModalComponent({
 			`post-img/${uuid()}_${selectedFile.name}`
 		);
 		setIsUploading(true);
+
 		const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
 		uploadTask.on(
@@ -134,16 +135,32 @@ function PhotoUploadModalComponent({
 			() => {
 				// 업로드 완료 후 URL 가져오기
 				getDownloadURL(storageRef).then((url) => {
-					console.log(
-						"업로드할 데이터:",
-						principalQueryState?.data?.data.user.userId,
-						postText,
-						url,
-						metadata ? metadata : manualMetadata,
-						address
-					);
+					photoPostUpload({
+						userId: principalQueryState?.data?.data.user.userId,
+						postText: postText,
+						imgUrl: url,
+						cameraModel: metadata?.Model
+							? metadata.Model
+							: manualMetadata.Model,
+						locationAddress: address,
+						latitude: metadata?.latitude
+							? metadata.latitude
+							: manualMetadata.latitude,
+						longitude: metadata?.longitude
+							? metadata.longitude
+							: manualMetadata.longitude,
+					})
+						.then((response) => {
+							console.log(response);
+						})
+						.catch((error) => {
+							console.log(error.response.data);
+							if (error.response.status === 400) {
+							}
+						});
 					setIsUploading(false);
 					alert("사진 업로드 성공!");
+					resetState();
 					onClose();
 				});
 			}
@@ -241,6 +258,7 @@ function PhotoUploadModalComponent({
 								<LocationSearch
 									ref={locationSearchRef}
 									onLocationSelected={(location) => {
+										setAddress(location.address);
 										// 선택한 위치의 위도와 경도를 상위로 전달
 										onMetaDataExtracted(
 											location.lat,
