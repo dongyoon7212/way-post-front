@@ -10,7 +10,7 @@ import LocationSearch, {
 } from "../LocationSearch/LocationSearch";
 import { storage } from "../../apis/firebase/firebaseConfig";
 import { useQueryClient } from "@tanstack/react-query";
-import { photoPostUpload } from "../../apis/apis/postApi";
+import { uploadPhotoPost } from "../../apis/apis/postApi";
 
 interface Props {
 	isOpen: boolean;
@@ -112,9 +112,10 @@ function PhotoUploadModalComponent({
 			alert("파일을 선택해 주세요.");
 			return;
 		}
+		console.log(selectedFile);
 		const storageRef = ref(
 			storage,
-			`post-img/${uuid()}_${selectedFile.name}`
+			`post-img/${uuid()}_${selectedFile.name.split(".").pop()}`
 		);
 		setIsUploading(true);
 
@@ -135,7 +136,7 @@ function PhotoUploadModalComponent({
 			() => {
 				// 업로드 완료 후 URL 가져오기
 				getDownloadURL(storageRef).then((url) => {
-					photoPostUpload({
+					uploadPhotoPost({
 						userId: principalQueryState?.data?.data.user.userId,
 						postText: postText,
 						imgUrl: url,
@@ -151,17 +152,21 @@ function PhotoUploadModalComponent({
 							: manualMetadata.longitude,
 					})
 						.then((response) => {
-							console.log(response);
+							const typedResponse = response as {
+								status: number;
+							};
+							if (typedResponse.status === 200) {
+								setIsUploading(false);
+								alert("사진 업로드 성공!");
+								resetState();
+								onClose();
+							}
 						})
 						.catch((error) => {
 							console.log(error.response.data);
 							if (error.response.status === 400) {
 							}
 						});
-					setIsUploading(false);
-					alert("사진 업로드 성공!");
-					resetState();
-					onClose();
 				});
 			}
 		);
@@ -178,7 +183,9 @@ function PhotoUploadModalComponent({
 			longitude: "",
 		});
 		setAddress("");
-
+		if (locationSearchRef.current) {
+			locationSearchRef.current.reset();
+		}
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
 		}

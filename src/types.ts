@@ -29,3 +29,16 @@ export interface Metadata {
 	latitude: number;
 	longitude: number;
 }
+
+export interface PhotoPost {
+	photoPostId: number;
+	userId: number;
+	postText: string;
+	imgUrl: string;
+	cameraModel: string;
+	locationAddress: string;
+	latitude: number;
+	longitude: number;
+	regDt: string;
+	updDt: string;
+}
