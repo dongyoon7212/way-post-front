@@ -6,6 +6,7 @@ import { PhotoPost } from "../../types";
 import { getPhotoPostList } from "../../apis/apis/postApi";
 
 const containerStyle = { width: "100vw", height: "100vh" };
+const CLUSTER_MAX_ZOOM = 15;
 const MARKER_SIZE = 50;
 
 interface GoogleMapProps {
@@ -28,6 +29,7 @@ export default function GoogleMapComponent({
 	});
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const clustererRef = useRef<MarkerClusterer | null>(null);
+	const manualMarkersRef = useRef<google.maps.Marker[]>([]);
 
 	// 초기 위치 요청
 	useEffect(() => {
@@ -39,17 +41,17 @@ export default function GoogleMapComponent({
 						lng: pos.coords.longitude,
 					};
 					setCurrentLocation(loc);
+					map?.panTo(loc);
 				},
 				console.error,
 				{ enableHighAccuracy: true }
 			);
 		}
-	}, [markerPosition]);
+	}, [markerPosition, map]);
 
 	const onLoad = useCallback(
 		(mapInstance: google.maps.Map) => {
 			setMap(mapInstance);
-			// 초기 센터 이동
 			mapInstance.panTo(markerPosition || currentLocation);
 		},
 		[markerPosition, currentLocation]
@@ -57,7 +59,7 @@ export default function GoogleMapComponent({
 
 	const onIdle = useCallback(() => {
 		if (!map) return;
-
+		const zoom = map.getZoom()!;
 		const bounds = map.getBounds()!;
 		const ne = bounds.getNorthEast();
 		const sw = bounds.getSouthWest();
@@ -70,60 +72,113 @@ export default function GoogleMapComponent({
 		})
 			.then((res) => (res as any).data as PhotoPost[])
 			.then((posts) => {
-				// 기존 마커/클러스터 제거
+				// 이전 클러스터 및 수동 마커 제거
 				clustererRef.current?.clearMarkers();
+				manualMarkersRef.current.forEach((m) => m.setMap(null));
+				manualMarkersRef.current = [];
 
-				// photo icon 마커 생성
-				const markers = posts.map((p) => {
-					const iconUrl = p.imgUrl; // 필요시 커스텀 SVG 또는 크기 조정
-					return new google.maps.Marker({
-						position: { lat: p.latitude, lng: p.longitude },
-						icon: {
-							url: iconUrl,
-							scaledSize: new google.maps.Size(
-								MARKER_SIZE,
-								MARKER_SIZE
-							),
-							anchor: new google.maps.Point(
-								MARKER_SIZE / 2,
-								MARKER_SIZE / 2
-							),
-						},
+				if (zoom <= CLUSTER_MAX_ZOOM) {
+					// 기본 클러스터링 모드: 모든 마커를 clusterer에 전달
+					const markers = posts.map((p) => {
+						const m = new google.maps.Marker({
+							position: { lat: p.latitude, lng: p.longitude },
+							icon: {
+								url: p.imgUrl,
+								scaledSize: new google.maps.Size(
+									MARKER_SIZE,
+									MARKER_SIZE
+								),
+								anchor: new google.maps.Point(
+									MARKER_SIZE / 2,
+									MARKER_SIZE / 2
+								),
+							},
+						});
+						return m;
 					});
-				});
+					clustererRef.current = new MarkerClusterer({
+						map,
+						markers,
+					});
+				} else {
+					// 확대된 상태: 모든 그룹별 마커 직접 표시, 동일 좌표 그룹은 label 처리
+					const groups = new Map<string, PhotoPost[]>();
+					posts.forEach((p) => {
+						const key = `${p.latitude},${p.longitude}`;
+						const arr = groups.get(key) || [];
+						arr.push(p);
+						groups.set(key, arr);
+					});
 
-				// 기본 MarkerClusterer 사용
-				clustererRef.current = new MarkerClusterer({
-					map,
-					markers,
-				});
+					const manualMarkers: google.maps.Marker[] = [];
+					groups.forEach((group, key) => {
+						const [latStr, lngStr] = key.split(",");
+						const pos = {
+							lat: parseFloat(latStr),
+							lng: parseFloat(lngStr),
+						};
+
+						const m = new google.maps.Marker({
+							position: pos,
+							map,
+							icon: {
+								url: group[0].imgUrl,
+								scaledSize: new google.maps.Size(
+									MARKER_SIZE,
+									MARKER_SIZE
+								),
+								anchor: new google.maps.Point(
+									MARKER_SIZE / 2,
+									MARKER_SIZE / 2
+								),
+							},
+							label:
+								group.length > 1
+									? {
+											text: String(group.length),
+											color: "#fff",
+											fontSize: "12px",
+											fontWeight: "bold",
+									  }
+									: undefined,
+						});
+						if (group.length > 1) {
+							m.addListener("click", () => {
+								console.log(
+									"Clicked overlapping group:",
+									group
+								);
+							});
+						}
+						manualMarkers.push(m);
+					});
+					manualMarkersRef.current = manualMarkers;
+				}
 			})
 			.catch(console.error);
 	}, [map]);
 
-	// 지도 중심 및 모달 오픈 상태에 따른 오프셋
+	// 모달 오픈 시 지도 패닝
 	useEffect(() => {
 		if (map) {
 			map.panTo(markerPosition || currentLocation);
-			if (upLoadModalOpen) {
-				map.panBy(window.innerWidth * 0.175, 0);
-			}
+			if (upLoadModalOpen) map.panBy(window.innerWidth * 0.175, 0);
 		}
 	}, [map, markerPosition, upLoadModalOpen, currentLocation]);
 
+	const center = markerPosition || currentLocation;
 	if (!isLoaded) return null;
 
 	return (
 		<GoogleMap
 			mapContainerStyle={containerStyle}
-			center={markerPosition || currentLocation}
+			center={center}
 			zoom={12}
 			options={{ disableDefaultUI: true }}
 			onLoad={onLoad}
 			onIdle={onIdle}
 		>
-			{/* 현재 위치 마커 */}
-			<Marker position={markerPosition || currentLocation} />
+			<Marker position={center} />
 		</GoogleMap>
 	);
 }
