@@ -1,9 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import {
+	GoogleMap,
+	Marker,
+	OverlayView,
+	useJsApiLoader,
+} from "@react-google-maps/api";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { PhotoPost } from "../../types";
 import { getPhotoPostList } from "../../apis/apis/postApi";
+import { css } from "@emotion/react";
 
 const containerStyle = { width: "100vw", height: "100vh" };
 const CLUSTER_MAX_ZOOM = 15;
@@ -28,12 +34,12 @@ export default function GoogleMapComponent({
 		lng: 126.978,
 	});
 	const [map, setMap] = useState<google.maps.Map | null>(null);
+	const [overlayPosts, setOverlayPosts] = useState<PhotoPost[]>([]);
 	const clustererRef = useRef<MarkerClusterer | null>(null);
-	const manualMarkersRef = useRef<google.maps.Marker[]>([]);
 
 	// 초기 위치 요청
 	useEffect(() => {
-		if (!markerPosition && navigator.geolocation) {
+		if (!markerPosition && navigator.geolocation && map) {
 			navigator.geolocation.getCurrentPosition(
 				(pos) => {
 					const loc = {
@@ -41,7 +47,7 @@ export default function GoogleMapComponent({
 						lng: pos.coords.longitude,
 					};
 					setCurrentLocation(loc);
-					map?.panTo(loc);
+					map.panTo(loc);
 				},
 				console.error,
 				{ enableHighAccuracy: true }
@@ -60,7 +66,8 @@ export default function GoogleMapComponent({
 	const onIdle = useCallback(() => {
 		if (!map) return;
 		const zoom = map.getZoom()!;
-		const bounds = map.getBounds()!;
+		const bounds = map.getBounds();
+		if (!bounds) return;
 		const ne = bounds.getNorthEast();
 		const sw = bounds.getSouthWest();
 
@@ -72,15 +79,22 @@ export default function GoogleMapComponent({
 		})
 			.then((res) => (res as any).data as PhotoPost[])
 			.then((posts) => {
-				// 이전 클러스터 및 수동 마커 제거
+				// 1) 초기화
 				clustererRef.current?.clearMarkers();
-				manualMarkersRef.current.forEach((m) => m.setMap(null));
-				manualMarkersRef.current = [];
+				setOverlayPosts([]);
 
-				if (zoom <= CLUSTER_MAX_ZOOM) {
-					// 기본 클러스터링 모드: 모든 마커를 clusterer에 전달
+				// 2) 좌표별 그룹핑
+				const groups = new Map<string, PhotoPost[]>();
+				posts.forEach((p) => {
+					const key = `${p.latitude},${p.longitude}`;
+					if (!groups.has(key)) groups.set(key, []);
+					groups.get(key)!.push(p);
+				});
+
+				if (0) {
+					// — 클러스터 모드: 모든 포스트 묶기
 					const markers = posts.map((p) => {
-						const m = new google.maps.Marker({
+						return new google.maps.Marker({
 							position: { lat: p.latitude, lng: p.longitude },
 							icon: {
 								url: p.imgUrl,
@@ -94,35 +108,30 @@ export default function GoogleMapComponent({
 								),
 							},
 						});
-						return m;
 					});
 					clustererRef.current = new MarkerClusterer({
 						map,
 						markers,
 					});
 				} else {
-					// 확대된 상태: 모든 그룹별 마커 직접 표시, 동일 좌표 그룹은 label 처리
-					const groups = new Map<string, PhotoPost[]>();
-					posts.forEach((p) => {
-						const key = `${p.latitude},${p.longitude}`;
-						const arr = groups.get(key) || [];
-						arr.push(p);
-						groups.set(key, arr);
+					// — 커스텀 오버레이 모드 —
+					const overlapPosts: PhotoPost[] = [];
+					const singlePosts: PhotoPost[] = [];
+
+					groups.forEach((group) => {
+						if (group.length > 1) {
+							overlapPosts.push(...group);
+						} else {
+							singlePosts.push(group[0]);
+						}
 					});
 
-					const manualMarkers: google.maps.Marker[] = [];
-					groups.forEach((group, key) => {
-						const [latStr, lngStr] = key.split(",");
-						const pos = {
-							lat: parseFloat(latStr),
-							lng: parseFloat(lngStr),
-						};
-
-						const m = new google.maps.Marker({
-							position: pos,
-							map,
+					// 3) 겹친 포스트만 클러스터 (gridSize=1)
+					const overlapMarkers = overlapPosts.map((p) => {
+						return new google.maps.Marker({
+							position: { lat: p.latitude, lng: p.longitude },
 							icon: {
-								url: group[0].imgUrl,
+								url: p.imgUrl,
 								scaledSize: new google.maps.Size(
 									MARKER_SIZE,
 									MARKER_SIZE
@@ -132,27 +141,16 @@ export default function GoogleMapComponent({
 									MARKER_SIZE / 2
 								),
 							},
-							label:
-								group.length > 1
-									? {
-											text: String(group.length),
-											color: "#fff",
-											fontSize: "12px",
-											fontWeight: "bold",
-									  }
-									: undefined,
 						});
-						if (group.length > 1) {
-							m.addListener("click", () => {
-								console.log(
-									"Clicked overlapping group:",
-									group
-								);
-							});
-						}
-						manualMarkers.push(m);
 					});
-					manualMarkersRef.current = manualMarkers;
+					clustererRef.current = new MarkerClusterer({
+						map,
+						markers: overlapMarkers,
+						gridSize: 1,
+					});
+
+					// 4) 개별(single) 포스트는 OverlayView 로 커스텀
+					setOverlayPosts(singlePosts);
 				}
 			})
 			.catch(console.error);
@@ -166,8 +164,8 @@ export default function GoogleMapComponent({
 		}
 	}, [map, markerPosition, upLoadModalOpen, currentLocation]);
 
-	const center = markerPosition || currentLocation;
 	if (!isLoaded) return null;
+	const center = markerPosition || currentLocation;
 
 	return (
 		<GoogleMap
@@ -178,7 +176,39 @@ export default function GoogleMapComponent({
 			onLoad={onLoad}
 			onIdle={onIdle}
 		>
+			{/* 현재 위치 마커 */}
 			<Marker position={center} />
+
+			{/* 커스텀 OverlayView 마커 */}
+			{overlayPosts.map((p) => (
+				<OverlayView
+					key={p.photoPostId}
+					position={{ lat: p.latitude, lng: p.longitude }}
+					mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+				>
+					<div
+						css={css`
+							width: ${MARKER_SIZE}px;
+							height: ${MARKER_SIZE}px;
+							border: 2px solid white;
+							border-radius: 8px;
+							overflow: hidden;
+							box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+						`}
+						onClick={() => console.log("Clicked post:", p)}
+					>
+						<img
+							src={p.imgUrl}
+							css={css`
+								width: 100%;
+								height: 100%;
+								object-fit: cover;
+							`}
+							alt="post thumbnail"
+						/>
+					</div>
+				</OverlayView>
+			))}
 		</GoogleMap>
 	);
 }
