@@ -12,10 +12,10 @@ import postImg8 from "../../assets/postImg8.jpg";
 import postImg9 from "../../assets/postImg9.jpg";
 import postImg10 from "../../assets/postImg10.jpg";
 import { LuAlignJustify } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { principalData } from "../../types";
-import { useRef, useState } from "react";
+import { principalData, User } from "../../types";
+import { useEffect, useRef, useState } from "react";
 import {
 	getDownloadURL,
 	ref,
@@ -24,7 +24,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
 import { v4 as uuid } from "uuid";
-import { editProfileImg } from "../../apis/apis/accountApi";
+import { editProfileImg, getUserById } from "../../apis/apis/accountApi";
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -35,7 +35,22 @@ function ProfilePage() {
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
-	console.log(principalData);
+	const params = useParams();
+	const [userData, setUserData] = useState<User>();
+
+	useEffect(() => {
+		if (params.id) {
+			getUserById(params.id).then((response) => {
+				const typedResponse = response as {
+					status: number;
+					data: User;
+				};
+				if (typedResponse.status === 200) {
+					setUserData(typedResponse.data);
+				}
+			});
+		}
+	}, []);
 
 	const handleProfileImageClick = () => {
 		fileInputRef.current?.click();
@@ -112,35 +127,41 @@ function ProfilePage() {
 					<div css={s.profileImgBox}>
 						<div css={s.imgBox}>
 							<img
-								src={principalData?.data.user.profileImg}
+								src={userData?.profileImg}
 								alt="프로필 이미지"
 							/>
 						</div>
 					</div>
 					<div css={s.profileInfoBox}>
 						<div css={s.profileName}>
-							<span>{principalData?.data.user.username}</span>
+							<span>{userData?.username}</span>
 							<button css={s.followBtn}>팔로우</button>
-							<button
-								onClick={handleProfileImageClick}
-								css={s.editBtn}
-							>
-								{isUploading ? (
-									<p>
-										업로드 중...{" "}
-										{Math.round(uploadProgress)}%
-									</p>
-								) : (
-									<p>프로필 변경</p>
-								)}
-							</button>
-							<input
-								type="file"
-								accept="image/*"
-								ref={fileInputRef}
-								style={{ display: "none" }}
-								onChange={handleImageUpload}
-							/>
+							{principalData?.data.user.userId == params.id ? (
+								<>
+									<button
+										onClick={handleProfileImageClick}
+										css={s.editBtn}
+									>
+										{isUploading ? (
+											<p>
+												업로드 중...{" "}
+												{Math.round(uploadProgress)}%
+											</p>
+										) : (
+											<p>프로필 변경</p>
+										)}
+									</button>
+									<input
+										type="file"
+										accept="image/*"
+										ref={fileInputRef}
+										style={{ display: "none" }}
+										onChange={handleImageUpload}
+									/>{" "}
+								</>
+							) : (
+								<></>
+							)}
 						</div>
 						<div css={s.follow}>
 							<span>
@@ -153,9 +174,7 @@ function ProfilePage() {
 								팔로우 <p>215</p>
 							</span>
 						</div>
-						<div css={s.introduce}>
-							{principalData?.data.user.introduce}
-						</div>
+						<div css={s.introduce}>{userData?.introduce}</div>
 					</div>
 				</div>
 				<div css={s.postLayout}>

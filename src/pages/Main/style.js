@@ -32,9 +32,11 @@ export const sidebarBtn = css`
 
 export const profileBtn = css`
 	position: absolute;
+	box-sizing: border-box;
+	width: 50px;
+	height: 50px;
 	top: 30px;
 	right: 30px;
-	font-size: 26px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -42,7 +44,8 @@ export const profileBtn = css`
 	z-index: 900;
 	background-color: white;
 	border: none;
-	padding: 12px;
+	overflow: hidden;
+	padding: 0;
 	cursor: pointer;
 	box-shadow: 1px 0px 28px 0px rgba(0, 0, 0, 0.5);
 	transition: all 0.2s ease-in-out;
@@ -51,6 +54,12 @@ export const profileBtn = css`
 		background-color: #f0f0f0; /* 밝은 회색 */
 		transform: scale(1.1);
 		box-shadow: 1px 0px 35px 0px rgba(0, 0, 0, 0.6); /* 더 강한 그림자 */
+	}
+
+	& > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 `;
 

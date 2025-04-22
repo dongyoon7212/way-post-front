@@ -8,3 +8,12 @@ export const editProfileImg = async (data) => {
 		return error;
 	}
 };
+
+export const getUserById = async (data) => {
+	try {
+		const response = instance.get(`/account/get/user?userId=${data}`);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

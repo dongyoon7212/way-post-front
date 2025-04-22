@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
-import { BsPersonFill } from "react-icons/bs";
 import { IoMdLogIn } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import GoogleMapComponent from "../../components/GoogleMap/GoogleMapComponent";
@@ -18,7 +17,7 @@ import LocationSearch, {
 	LocationSearchRef,
 } from "../../components/LocationSearch/LocationSearch";
 import PhotoPostModal from "../../components/PhotoPostModal/PhotoPostModal";
-import { PhotoPost } from "../../types";
+import { PhotoPost, principalData } from "../../types";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,7 +35,9 @@ function MainPage() {
 
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const principalData = queryClient.getQueryData(["getPrincipal"]);
+	const principalData = queryClient.getQueryData<principalData>([
+		"getPrincipal",
+	]);
 
 	const menuRef = useRef<HTMLDivElement>(null);
 
@@ -107,12 +108,18 @@ function MainPage() {
 					onClick={
 						principalData
 							? () => {
-									navigate("/profile");
+									navigate(
+										`/profile/${principalData.data.user.userId}`
+									);
 							  }
 							: () => setIsLoginOpen(true)
 					}
 				>
-					{principalData ? <BsPersonFill /> : <IoMdLogIn />}
+					{principalData ? (
+						<img src={principalData.data.user.profileImg} />
+					) : (
+						<IoMdLogIn size={24} />
+					)}
 				</button>
 				<div css={s.addPostContainer} ref={menuRef}>
 					<button

@@ -150,6 +150,8 @@ export default function GoogleMapComponent({
 			img.crossOrigin = "anonymous";
 			img.src = imgUrl;
 			img.onload = () => {
+				if (typeof google === "undefined") return; // ← 🔒 여기 추가
+
 				drawRoundedImageWithBorder(ctx, img, 0, 0, size, size, 10);
 
 				const icon: google.maps.Icon = {
