@@ -75,6 +75,8 @@ export const imgBox = css`
 
 	& > img {
 		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 `;
 
@@ -87,6 +89,7 @@ export const profileInfoBox = css`
 `;
 
 export const profileName = css`
+	position: relative;
 	width: 100%;
 	height: 20%;
 	display: flex;
@@ -96,16 +99,33 @@ export const profileName = css`
 		font-size: 20px;
 		font-weight: 500;
 	}
+`;
 
-	& > button {
-		margin-left: 30px;
-		padding: 7px 16px;
-		border: none;
-		border-radius: 5px;
-		background-color: #007bff;
-		color: white;
-		cursor: pointer;
-		font-size: 12px;
+export const followBtn = css`
+	margin-left: 30px;
+	padding: 7px 16px;
+	border: none;
+	border-radius: 5px;
+	background-color: #007bff;
+	color: white;
+	cursor: pointer;
+	font-size: 12px;
+`;
+
+export const editBtn = css`
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 7px 16px;
+	background-color: white;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 12px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #f0f0f0;
 	}
 `;
 

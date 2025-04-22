@@ -10,6 +10,7 @@ export interface User {
 	username: string;
 	profileImg: string;
 	userRoles: UserRole[];
+	introduce: string;
 }
 
 export interface UserRole {
