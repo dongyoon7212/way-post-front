@@ -14,6 +14,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { LoadScript } from "@react-google-maps/api";
 import { Library } from "@googlemaps/js-api-loader";
+import LocationSearch, {
+	LocationSearchRef,
+} from "../../components/LocationSearch/LocationSearch";
+import PhotoPostModal from "../../components/PhotoPostModal/PhotoPostModal";
+import { PhotoPost } from "../../types";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -21,10 +26,14 @@ function MainPage() {
 	const [isLoginOpen, setIsLoginOpen] = useState(false); // 로그인 모달 상태
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+	const [isPhotoPostModalOpen, setIsPhotoPostModalOpen] = useState(false);
+	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [markerPosition, setMarkerPosition] = useState<{
 		lat: number;
 		lng: number;
 	} | null>(null);
+	const locationSearchRef = useRef<LocationSearchRef>(null);
+
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData(["getPrincipal"]);
@@ -71,6 +80,9 @@ function MainPage() {
 				<GoogleMapComponent
 					markerPosition={markerPosition}
 					upLoadModalOpen={isUploadModalOpen}
+					setIsPhotoPostModalOpen={() =>
+						setIsPhotoPostModalOpen(!isPhotoPostModalOpen)
+					}
 				/>
 				<button
 					css={s.sidebarBtn}
@@ -79,7 +91,15 @@ function MainPage() {
 					<LuAlignJustify />
 				</button>
 				<div css={s.searchBox}>
-					<input type="text" />
+					<LocationSearch
+						ref={locationSearchRef}
+						onLocationSelected={(location) => {
+							setMarkerPosition({
+								lat: location.lat,
+								lng: location.lng,
+							});
+						}}
+					/>
 				</div>
 				<button
 					css={s.profileBtn}
@@ -121,6 +141,10 @@ function MainPage() {
 					isOpen={isUploadModalOpen}
 					onClose={() => setIsUploadModalOpen(false)}
 					onMetaDataExtracted={handleMetaDataExtracted}
+				/>
+				<PhotoPostModal
+					isOpen={isPhotoPostModalOpen}
+					postGroup={postGroup}
 				/>
 				{isLoginOpen && (
 					<LoginModalComponent

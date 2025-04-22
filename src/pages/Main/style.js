@@ -65,19 +65,18 @@ export const searchBox = css`
 	left: 50%;
 	transform: translateX(-50%);
 
-	& > input {
+	& > div > input {
 		text-align: center;
 		padding-bottom: 5px;
 		width: 7vw;
 		color: #2a2a2e;
 		border: none;
-		border-bottom: 1px solid #dbdbdb;
 		outline: none;
 		transition: all 0.2s ease-in-out;
 
 		&:focus {
 			width: 20vw;
-			font-size: 20px;
+			font-size: 16px;
 		}
 	}
 `;

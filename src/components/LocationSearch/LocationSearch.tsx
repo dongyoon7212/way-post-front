@@ -1,10 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {
-	useState,
-	forwardRef,
-	useImperativeHandle,
-	useRef,
-} from "react";
+import { useState, forwardRef, useImperativeHandle, useRef } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import * as s from "./style";
 
