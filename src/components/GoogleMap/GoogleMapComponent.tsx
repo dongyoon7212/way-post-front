@@ -11,6 +11,7 @@ interface GoogleMapProps {
 	markerPosition: { lat: number; lng: number } | null;
 	upLoadModalOpen: boolean;
 	setIsPhotoPostModalOpen: () => void;
+	setPostGroup: (posts: PhotoPost[]) => void;
 }
 
 const imageIconCache: Record<string, google.maps.Icon> = {};
@@ -19,6 +20,7 @@ export default function GoogleMapComponent({
 	markerPosition,
 	upLoadModalOpen,
 	setIsPhotoPostModalOpen,
+	setPostGroup,
 }: GoogleMapProps) {
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
@@ -208,6 +210,7 @@ export default function GoogleMapComponent({
 					const marker = new google.maps.Marker({ position, icon });
 					marker.addListener("click", () => {
 						setIsPhotoPostModalOpen();
+						setPostGroup(group);
 					});
 					markers.push(marker);
 				}

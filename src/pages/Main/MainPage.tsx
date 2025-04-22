@@ -83,6 +83,7 @@ function MainPage() {
 					setIsPhotoPostModalOpen={() =>
 						setIsPhotoPostModalOpen(!isPhotoPostModalOpen)
 					}
+					setPostGroup={setPostGroup}
 				/>
 				<button
 					css={s.sidebarBtn}

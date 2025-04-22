@@ -8,8 +8,22 @@ interface Props {
 	postGroup: PhotoPost[];
 }
 
-function PhotoPostModal({ isOpen }: Props) {
-	return <div css={s.modalWrapper(isOpen)}></div>;
+function PhotoPostModal({ isOpen, postGroup }: Props) {
+	return (
+		<div css={s.modalWrapper(isOpen)}>
+			<div>
+				{postGroup.map((post, id) => (
+					<div key={id}>
+						<img src={post.imgUrl} />
+						<div>
+							<h3>{post.locationAddress}</h3>
+							<p>{post.postText}</p>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 }
 
 export default PhotoPostModal;
