@@ -17,3 +17,12 @@ export const getPhotoPostList = async (params) => {
 		return error;
 	}
 };
+
+export const getPhotoPostListByUserId = async (params) => {
+	try {
+		const response = instance.get(`/post/photo/getlist/${params}`);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

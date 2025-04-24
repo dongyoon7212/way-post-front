@@ -157,12 +157,13 @@ export const postLayout = css`
 	width: 100%;
 	padding-bottom: 50px;
 	display: grid;
-	grid-template-columns: repeat(3, 1fr); /* 3열 그리드 */
-	grid-gap: 5px; /* 그리드 간격 */
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 5px;
 `;
 
 export const postBox = css`
 	width: 100%;
+	aspect-ratio: 1 / 1; /* 가로:세로를 1:1로 고정 */
 	position: relative;
 	overflow: hidden;
 

@@ -77,7 +77,7 @@ export const searchBox = css`
 	& > div > input {
 		text-align: center;
 		padding-bottom: 5px;
-		width: 7vw;
+		width: 10vw;
 		color: #2a2a2e;
 		border: none;
 		outline: none;

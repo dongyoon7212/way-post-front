@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import profileImg from "../../assets/profileImg.png";
 import postImg1 from "../../assets/postImg1.jpg";
 import postImg2 from "../../assets/postImg2.jpg";
 import postImg3 from "../../assets/postImg3.jpg";
@@ -14,17 +13,13 @@ import postImg10 from "../../assets/postImg10.jpg";
 import { LuAlignJustify } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { principalData, User } from "../../types";
+import { PhotoPost, principalData, User } from "../../types";
 import { useEffect, useRef, useState } from "react";
-import {
-	getDownloadURL,
-	ref,
-	uploadBytes,
-	uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
 import { v4 as uuid } from "uuid";
 import { editProfileImg, getUserById } from "../../apis/apis/accountApi";
+import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -37,6 +32,7 @@ function ProfilePage() {
 	]);
 	const params = useParams();
 	const [userData, setUserData] = useState<User>();
+	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 
 	useEffect(() => {
 		if (params.id) {
@@ -49,8 +45,19 @@ function ProfilePage() {
 					setUserData(typedResponse.data);
 				}
 			});
+			getPhotoPostListByUserId(parseInt(params.id)).then((response) => {
+				const typedResponse = response as {
+					status: number;
+					data: PhotoPost[];
+				};
+				if (typedResponse.status === 200) {
+					setPostGroup(typedResponse.data);
+				}
+			});
 		}
 	}, []);
+
+	console.log(postGroup);
 
 	const handleProfileImageClick = () => {
 		fileInputRef.current?.click();
@@ -136,7 +143,7 @@ function ProfilePage() {
 						<div css={s.profileName}>
 							<span>{userData?.username}</span>
 							<button css={s.followBtn}>팔로우</button>
-							{principalData?.data.user.userId == params.id ? (
+							{principalData?.data.user.userId == params?.id ? (
 								<>
 									<button
 										onClick={handleProfileImageClick}
@@ -178,20 +185,9 @@ function ProfilePage() {
 					</div>
 				</div>
 				<div css={s.postLayout}>
-					{[
-						postImg1,
-						postImg2,
-						postImg3,
-						postImg4,
-						postImg5,
-						postImg6,
-						postImg7,
-						postImg8,
-						postImg9,
-						postImg10,
-					].map((img, i) => (
-						<div css={s.postBox} key={i}>
-							<img src={img} alt={`게시물 이미지 ${i + 1}`} />
+					{postGroup.map((post, index) => (
+						<div css={s.postBox} key={index}>
+							<img src={post.imgUrl} alt={`게시물 이미지 ${index + 1}`} />
 						</div>
 					))}
 				</div>
