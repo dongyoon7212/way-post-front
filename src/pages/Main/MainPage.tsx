@@ -152,6 +152,7 @@ function MainPage() {
 				/>
 				<PhotoPostModal
 					isOpen={isPhotoPostModalOpen}
+					onClose={() => setIsPhotoPostModalOpen(false)}
 					postGroup={postGroup}
 				/>
 				{isLoginOpen && (

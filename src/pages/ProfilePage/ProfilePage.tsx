@@ -1,15 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import postImg1 from "../../assets/postImg1.jpg";
-import postImg2 from "../../assets/postImg2.jpg";
-import postImg3 from "../../assets/postImg3.jpg";
-import postImg4 from "../../assets/postImg4.jpg";
-import postImg5 from "../../assets/postImg5.jpg";
-import postImg6 from "../../assets/postImg6.jpg";
-import postImg7 from "../../assets/postImg7.jpg";
-import postImg8 from "../../assets/postImg8.jpg";
-import postImg9 from "../../assets/postImg9.jpg";
-import postImg10 from "../../assets/postImg10.jpg";
 import { LuAlignJustify } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -142,7 +132,13 @@ function ProfilePage() {
 					<div css={s.profileInfoBox}>
 						<div css={s.profileName}>
 							<span>{userData?.username}</span>
-							<button css={s.followBtn}>팔로우</button>
+							{principalData?.data.user.userId == params?.id ? (
+								<></>
+							) : (
+								<>
+									<button css={s.followBtn}>팔로우</button>
+								</>
+							)}
 							{principalData?.data.user.userId == params?.id ? (
 								<>
 									<button
@@ -187,7 +183,10 @@ function ProfilePage() {
 				<div css={s.postLayout}>
 					{postGroup.map((post, index) => (
 						<div css={s.postBox} key={index}>
-							<img src={post.imgUrl} alt={`게시물 이미지 ${index + 1}`} />
+							<img
+								src={post.imgUrl}
+								alt={`게시물 이미지 ${index + 1}`}
+							/>
 						</div>
 					))}
 				</div>

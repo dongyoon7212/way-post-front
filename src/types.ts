@@ -42,4 +42,5 @@ export interface PhotoPost {
 	longitude: number;
 	regDt: string;
 	updDt: string;
+	user: User;
 }
