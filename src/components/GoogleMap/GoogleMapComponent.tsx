@@ -22,9 +22,11 @@ export default function GoogleMapComponent({
 	setIsPhotoPostModalOpen,
 	setPostGroup,
 }: GoogleMapProps) {
+	const GOOGLE_LIBRARIES: ("places" | "marker")[] = ["places"];
+
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-		libraries: ["places"],
+		libraries: GOOGLE_LIBRARIES,
 	});
 
 	const [currentLocation, setCurrentLocation] = useState({

@@ -10,11 +10,14 @@ export const layout = css`
 `;
 
 export const headerLayout = css`
+	position: fixed;
+	z-index: 1000;
 	width: 100vw;
 	height: 8vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: white;
 	border-bottom: 1px solid #dbdbdb;
 `;
 
@@ -44,6 +47,7 @@ export const menu = css`
 
 export const contentLayout = css`
 	width: 70vw;
+	margin-top: 8vh;
 `;
 
 export const infoLayout = css`

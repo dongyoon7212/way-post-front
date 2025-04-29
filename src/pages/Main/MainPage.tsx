@@ -41,7 +41,7 @@ function MainPage() {
 
 	const menuRef = useRef<HTMLDivElement>(null);
 
-	const handleMetaDataExtracted = (lat: number, lng: number) => {
+	const handleChangeLocation = (lat: number, lng: number) => {
 		setMarkerPosition({ lat, lng });
 	};
 
@@ -148,7 +148,7 @@ function MainPage() {
 				<PhotoUploadModalComponent
 					isOpen={isUploadModalOpen}
 					onClose={() => setIsUploadModalOpen(false)}
-					onMetaDataExtracted={handleMetaDataExtracted}
+					onMetaDataExtracted={handleChangeLocation}
 				/>
 				<PhotoPostModal
 					isOpen={isPhotoPostModalOpen}
