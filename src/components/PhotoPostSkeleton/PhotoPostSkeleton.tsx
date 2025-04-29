@@ -12,7 +12,6 @@ export function PhotoPostSkeleton({ src, alt }: ImageWithSkeletonProps) {
 
 	return (
 		<div css={s.container}>
-			{/* 로딩 중엔 스켈레톤 렌더 */}
 			{!loaded && <div css={s.skeletonStyle} />}
 			<img
 				src={src}

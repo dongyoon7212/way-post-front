@@ -59,22 +59,29 @@ export const profileBox = css`
 	align-items: center;
 	margin-bottom: 12px;
 
-	& > img {
+	& > a > img {
 		width: 50px;
 		height: 50px;
 		object-fit: cover;
 		border-radius: 50%;
 		margin-right: 10px;
+		border: 1px solid #dbdbdb;
 	}
 
 	& > div {
-		display: flex;
-		flex-direction: column;
 		padding-top: 10px;
+		width: auto;
+
+		& > a {
+			font-size: 16px;
+			text-decoration: none;
+			color: black;
+		}
 
 		& > p {
 			padding-top: 5px;
 			font-size: 12px;
+			cursor: default;
 		}
 	}
 `;
@@ -99,6 +106,7 @@ export const textBox = css`
 		width: 100%;
 		height: 100%;
 		font-size: 16px;
+		cursor: default;
 	}
 `;
 
@@ -106,6 +114,7 @@ export const commentBox = css`
 	display: flex;
 	justify-content: end;
 	margin-bottom: 20px;
+	cursor: default;
 
 	& > p {
 		font-size: 17px;

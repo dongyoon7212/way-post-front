@@ -12,11 +12,12 @@ export const shimmer = keyframes`
 export const container = css`
 	position: relative;
 	width: 100%;
+	height: 100%;
 `;
 
 export const skeletonStyle = css`
 	width: 100%;
-	height: 400px;
+	aspect-ratio: 1 / 1;
 	background-color: #eee;
 	background-image: linear-gradient(90deg, #eee 0%, #f5f5f5 40%, #eee 80%);
 	background-size: 200% 100%;

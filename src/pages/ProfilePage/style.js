@@ -155,6 +155,7 @@ export const introduce = css`
 
 export const postLayout = css`
 	width: 100%;
+	height: 100%;
 	padding-bottom: 50px;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
@@ -166,10 +167,4 @@ export const postBox = css`
 	aspect-ratio: 1 / 1; /* 가로:세로를 1:1로 고정 */
 	position: relative;
 	overflow: hidden;
-
-	& > img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
 `;

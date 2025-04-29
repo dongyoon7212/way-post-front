@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef } from "react";
 import * as s from "./style";
 import { PhotoPost } from "../../types";
 import { FaComments } from "react-icons/fa6";
@@ -23,9 +22,13 @@ function PhotoPostModal({ isOpen, onClose, postGroup }: Props) {
 				{postGroup.map((post, id) => (
 					<div key={id} css={s.postBox}>
 						<div css={s.profileBox}>
-							<img src={post.user.profileImg} />
+							<a href={`/profile/${post.userId}`}>
+								<img src={post.user.profileImg} />
+							</a>
 							<div>
-								<h3>{post.user.username}</h3>
+								<a href={`/profile/${post.userId}`}>
+									{post.user.username}
+								</a>
 								<p>
 									{post.locationAddress} / {post.cameraModel}
 								</p>

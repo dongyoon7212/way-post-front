@@ -10,6 +10,7 @@ import { storage } from "../../apis/firebase/firebaseConfig";
 import { v4 as uuid } from "uuid";
 import { editProfileImg, getUserById } from "../../apis/apis/accountApi";
 import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
+import { PhotoPostSkeleton } from "../../components/PhotoPostSkeleton/PhotoPostSkeleton";
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -182,8 +183,9 @@ function ProfilePage() {
 				</div>
 				<div css={s.postLayout}>
 					{postGroup.map((post, index) => (
-						<div css={s.postBox} key={index}>
-							<img
+						<div css={s.postBox} key={post.photoPostId || index}>
+							{/* 스켈레톤 + 실제 이미지 */}
+							<PhotoPostSkeleton
 								src={post.imgUrl}
 								alt={`게시물 이미지 ${index + 1}`}
 							/>
