@@ -12,10 +12,30 @@ export const modalWrapper = (isOpen) => css`
 	transition: right 0.2s ease-in-out;
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 45px 20px;
 	z-index: 910;
 	border-radius: 20px;
 	box-sizing: border-box;
+`;
+
+export const closeBtn = css`
+	position: absolute;
+	font-size: 24px;
+	top: 10px;
+	right: 10px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s ease-in-out;
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.1);
+	}
 `;
 
 export const postContainer = css`
@@ -66,12 +86,6 @@ export const imgBox = css`
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 15px;
-
-	& > img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
 `;
 
 export const textBox = css`

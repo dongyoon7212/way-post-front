@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as s from "./style";
 import { PhotoPost } from "../../types";
 import { FaComments } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
+import { PhotoPostSkeleton } from "../PhotoPostSkeleton/PhotoPostSkeleton";
+import { IoCloseOutline } from "react-icons/io5";
 
 interface Props {
 	isOpen: boolean;
@@ -12,29 +14,11 @@ interface Props {
 }
 
 function PhotoPostModal({ isOpen, onClose, postGroup }: Props) {
-	const modalRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
-			) {
-				onClose();
-			}
-		};
-
-		if (isOpen) {
-			document.addEventListener("mousedown", handleClickOutside);
-		}
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	}, [isOpen, onClose]);
-
 	return (
-		<div ref={modalRef} css={s.modalWrapper(isOpen)}>
+		<div css={s.modalWrapper(isOpen)}>
+			<button onClick={onClose} css={s.closeBtn}>
+				<IoCloseOutline />
+			</button>
 			<div css={s.postContainer}>
 				{postGroup.map((post, id) => (
 					<div key={id} css={s.postBox}>
@@ -48,7 +32,10 @@ function PhotoPostModal({ isOpen, onClose, postGroup }: Props) {
 							</div>
 						</div>
 						<div css={s.imgBox}>
-							<img src={post.imgUrl} />
+							<PhotoPostSkeleton
+								src={post.imgUrl}
+								alt={`게시물 이미지 ${id + 1}`}
+							/>
 						</div>
 						<div css={s.textBox}>
 							<p>{post.postText}</p>

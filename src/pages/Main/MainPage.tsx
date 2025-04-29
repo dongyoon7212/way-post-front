@@ -154,6 +154,7 @@ function MainPage() {
 					isOpen={isPhotoPostModalOpen}
 					onClose={() => setIsPhotoPostModalOpen(false)}
 					postGroup={postGroup}
+					key={postGroup[0]?.photoPostId}
 				/>
 				{isLoginOpen && (
 					<LoginModalComponent
