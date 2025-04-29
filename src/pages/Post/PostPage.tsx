@@ -6,11 +6,17 @@ import postImg1 from "../../assets/postImg1.jpg";
 import { FaComments } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { PhotoPost } from "../../types";
-import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
+import { PhotoPost, principalData } from "../../types";
+import { addComment, getPhotoPostListByUserId } from "../../apis/apis/postApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 function PostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
+	const [comment, setComment] = useState<string>("");
+	const queryClient = useQueryClient();
+	const principalData = queryClient.getQueryData<principalData>([
+		"getPrincipal",
+	]);
 	const navigate = useNavigate();
 	const params = useParams();
 
@@ -27,6 +33,18 @@ function PostPage() {
 			});
 		}
 	}, []);
+
+	const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setComment(e.target.value);
+	};
+
+	const handleCommentSubmit = (photoPostId: number, userId: number) => {
+		addComment({
+			photoPostId: photoPostId,
+			userId: userId,
+			content: comment,
+		}).then((response) => {});
+	};
 
 	return (
 		<div css={s.layout}>
@@ -72,17 +90,31 @@ function PostPage() {
 							<span>{post.postText}</span>
 						</div>
 						<div css={s.comments}>
-							<p key={1} css={s.commentLine}>
-								<strong>홍길동</strong> 댓글내용입니다.
-							</p>
+							{post.comments.map((comment, id) => (
+								<p key={id} css={s.commentLine}>
+									<strong>{comment.user.username}</strong>{" "}
+									{comment.content}
+								</p>
+							))}
 						</div>
 						<form css={s.commentForm}>
 							<input
 								type="text"
 								placeholder="댓글 달기..."
 								css={s.commentInput}
+								onChange={handleCommentChange}
+								value={comment}
 							/>
-							<button type="submit" css={s.commentButton}>
+							<button
+								type="submit"
+								css={s.commentButton}
+								onClick={() => {
+									handleCommentSubmit(
+										post.photoPostId,
+										principalData?.data.user.userId ?? 0
+									);
+								}}
+							>
 								게시
 							</button>
 						</form>

@@ -31,6 +31,16 @@ export interface Metadata {
 	longitude: number;
 }
 
+export interface Comment {
+	commentId: number;
+	photoPostId: number;
+	userId: number;
+	content: string;
+	regDt: string;
+	updDt: string;
+	user: User;
+}
+
 export interface PhotoPost {
 	photoPostId: number;
 	userId: number;
@@ -43,4 +53,5 @@ export interface PhotoPost {
 	regDt: string;
 	updDt: string;
 	user: User;
+	comments: Comment[];
 }

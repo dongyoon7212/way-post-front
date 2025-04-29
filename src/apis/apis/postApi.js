@@ -26,3 +26,12 @@ export const getPhotoPostListByUserId = async (params) => {
 		return error;
 	}
 };
+
+export const addComment = async (data) => {
+	try {
+		const response = instance.post("/post/photo/comment/add", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
