@@ -59,7 +59,6 @@ export const postCard = css`
 	overflow: hidden;
 `;
 
-// 1. Header with avatar + username
 export const postHeader = css`
 	display: flex;
 	align-items: center;

@@ -167,6 +167,7 @@ export const postLayout = css`
 `;
 
 export const postBox = css`
+	cursor: pointer;
 	width: 100%;
 	aspect-ratio: 1 / 1; /* 가로:세로를 1:1로 고정 */
 	position: relative;

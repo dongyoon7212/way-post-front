@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
-import postImg1 from "../../assets/postImg1.jpg";
 import { FaComments } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PhotoPost, principalData } from "../../types";
 import { addComment, getPhotoPostListByUserId } from "../../apis/apis/postApi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,6 +18,21 @@ function PostPage() {
 	]);
 	const navigate = useNavigate();
 	const params = useParams();
+	const { state } = useLocation();
+	const selectedPostId: number | undefined = state?.selectedPostId;
+	const postRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+	useEffect(() => {
+		if (selectedPostId == null) return;
+		const el = postRefs.current[selectedPostId];
+		if (!el) return;
+		const elementY = el.getBoundingClientRect().top + window.pageYOffset;
+		const headerHeight = window.innerHeight * 0.08;
+		window.scrollTo({
+			top: elementY - headerHeight,
+			behavior: "smooth",
+		});
+	}, [selectedPostId, postGroup]);
 
 	useEffect(() => {
 		if (params.id) {
@@ -65,7 +79,14 @@ function PostPage() {
 			</header>
 			<main css={s.feedLayout}>
 				{postGroup.map((post, id) => (
-					<article key={id} css={s.postCard}>
+					<article
+						key={id}
+						css={s.postCard}
+						ref={(el) =>
+							(postRefs.current[post.photoPostId] =
+								el as HTMLDivElement | null)
+						}
+					>
 						<div css={s.postHeader}>
 							<img
 								src={post.user.profileImg}

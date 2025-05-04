@@ -54,6 +54,12 @@ function ProfilePage() {
 		fileInputRef.current?.click();
 	};
 
+	const handleCardClick = (id: Number, postId: Number) => {
+		navigate(`/post/${id}`, {
+			state: { selectedPostId: postId },
+		});
+	};
+
 	const handleImageUpload = async (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -183,7 +189,13 @@ function ProfilePage() {
 				</div>
 				<div css={s.postLayout}>
 					{postGroup.map((post, index) => (
-						<div css={s.postBox} key={post.photoPostId || index}>
+						<div
+							css={s.postBox}
+							key={post.photoPostId || index}
+							onClick={() =>
+								handleCardClick(post.userId, post.photoPostId)
+							}
+						>
 							{/* 스켈레톤 + 실제 이미지 */}
 							<PhotoPostSkeleton
 								src={post.imgUrl}
