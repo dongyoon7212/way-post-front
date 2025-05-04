@@ -35,3 +35,12 @@ export const addComment = async (data) => {
 		return error;
 	}
 };
+
+export const removePhotoPost = async (params) => {
+	try {
+		const response = instance.post(`/post/photo/remove/${params}`);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

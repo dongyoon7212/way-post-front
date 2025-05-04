@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import * as s from "./style";
 import exifr from "exifr";
+import heic2any from "heic2any";
 import { v4 as uuid } from "uuid";
 import { Metadata, principalData } from "../../types";
 import LocationSearch, {
@@ -42,46 +43,69 @@ function PhotoUploadModalComponent({
 		"getPrincipal",
 	]);
 
-	// 파일 선택 시 호출되는 핸들러
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0];
-			setSelectedFile(file);
-			const preview = URL.createObjectURL(file);
-			setPreviewUrl(preview);
+		if (!e.target.files?.[0]) return;
 
-			// 파일 선택 후 추가 로직(예: 미리보기, 업로드 준비 등) 작성 가능
+		let file = e.target.files[0];
+
+		// 1) HEIC/HEIF 포맷이면 JPEG로 변환
+		if (
+			file.type === "image/heic" ||
+			file.type === "image/heIF" ||
+			/\.heic$/i.test(file.name)
+		) {
 			try {
-				// exifr를 사용해 메타데이터 추출
-				const meta = await exifr.parse(file);
-				if (meta && meta.latitude && meta.longitude) {
-					setMetadata(meta);
-					onMetaDataExtracted(meta.latitude, meta.longitude);
-					// metadata가 있고, latitude와 longitude 값이 있을 때
-					const geocoder = new google.maps.Geocoder();
-					geocoder.geocode(
-						{
-							location: {
-								lat: meta.latitude,
-								lng: meta.longitude,
-							},
-						},
-						(results, status) => {
-							// 주소 저장
-							if (status === "OK" && results && results[1]) {
-								const address = results[1].formatted_address;
-								setAddress(address);
-							} else {
-								console.error("역지오코딩 실패:", status);
-							}
-						}
-					);
-				} else {
-					console.log("GPS 정보가 없는 파일입니다.");
-				}
-			} catch (error) {
-				console.error("메타데이터 추출 실패:", error);
+				const convertedBlob = (await heic2any({
+					blob: file,
+					toType: "image/jpeg",
+					quality: 0.8,
+				})) as Blob;
+				file = new File(
+					[convertedBlob],
+					file.name.replace(/\.(heic|HEIC)$/i, ".jpg"),
+					{ type: "image/jpeg" }
+				);
+			} catch (convertError) {
+				console.error("HEIC → JPEG 변환 실패:", convertError);
+				alert("HEIC 형식의 이미지는 지원되지 않습니다.");
+				return;
 			}
+		}
+
+		// 2) 프리뷰 URL 생성
+		setSelectedFile(file);
+		const preview = URL.createObjectURL(file);
+		setPreviewUrl(preview);
+
+		// 3) exifr 로 메타데이터 추출
+		try {
+			const meta = await exifr.parse(file);
+			if (meta && meta.latitude && meta.longitude) {
+				setMetadata(meta);
+				onMetaDataExtracted(meta.latitude, meta.longitude);
+
+				// 4) 역지오코딩
+				const geocoder = new google.maps.Geocoder();
+				geocoder.geocode(
+					{
+						location: {
+							lat: meta.latitude,
+							lng: meta.longitude,
+						},
+					},
+					(results, status) => {
+						if (status === "OK" && results && results[1]) {
+							setAddress(results[1].formatted_address);
+						} else {
+							console.error("역지오코딩 실패:", status);
+						}
+					}
+				);
+			} else {
+				console.log("GPS 정보가 없는 파일입니다.");
+			}
+		} catch (err) {
+			console.error("메타데이터 추출 실패:", err);
 		}
 	};
 

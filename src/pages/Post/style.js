@@ -62,7 +62,51 @@ export const postCard = css`
 export const postHeader = css`
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	padding: 12px;
+	position: relative;
+`;
+
+export const profileBox = css`
+	display: flex;
+	align-items: center;
+`;
+
+export const dropdownBtn = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 20px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+`;
+
+export const dropdownMenu = css`
+	position: absolute;
+	top: 100%; /* 헤더 바로 아래 */
+	right: 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 100;
+	overflow: hidden;
+`;
+
+export const dropdownItem = css`
+	display: block;
+	width: 100%;
+	padding: 8px 16px;
+	background: none;
+	border: none;
+	text-align: left;
+	font-size: 16px;
+	cursor: pointer;
+
+	&:hover {
+		background: #f5f5f5;
+	}
 `;
 
 export const avatar = css`

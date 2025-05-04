@@ -6,12 +6,21 @@ import { FaComments } from "react-icons/fa6";
 import { AiFillLike } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { PhotoPost, principalData } from "../../types";
-import { addComment, getPhotoPostListByUserId } from "../../apis/apis/postApi";
+import {
+	addComment,
+	getPhotoPostListByUserId,
+	removePhotoPost,
+} from "../../apis/apis/postApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { MdEdit } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 
 function PostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [comment, setComment] = useState<string>("");
+	const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+	const menuRef = useRef<HTMLDivElement>(null);
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
@@ -60,6 +69,23 @@ function PostPage() {
 		}).then((response) => {});
 	};
 
+	const handleRemovePostClick = (id: Number) => {
+		if (window.confirm("정말로 삭제하시겠습니까?")) {
+			removePhotoPost(id).then((response) => {
+				const typedResponse = response as {
+					status: number;
+				};
+				if (typedResponse.status === 200) {
+					alert("삭제되었습니다.");
+					setPostGroup((prev) =>
+						prev.filter((post) => post.photoPostId !== id)
+					);
+					setOpenMenuId(null);
+				}
+			});
+		}
+	};
+
 	return (
 		<div css={s.layout}>
 			<header css={s.headerLayout}>
@@ -88,12 +114,45 @@ function PostPage() {
 						}
 					>
 						<div css={s.postHeader}>
-							<img
-								src={post.user.profileImg}
-								alt={"프로필 이미지"}
-								css={s.avatar}
-							/>
-							<span css={s.username}>{post.user.username}</span>
+							<div css={s.profileBox}>
+								<img
+									src={post.user.profileImg}
+									alt={"프로필 이미지"}
+									css={s.avatar}
+								/>
+								<span css={s.username}>
+									{post.user.username}
+								</span>
+							</div>
+							<button
+								css={s.dropdownBtn}
+								onClick={() =>
+									setOpenMenuId(
+										openMenuId === post.photoPostId
+											? null
+											: post.photoPostId
+									)
+								}
+							>
+								<HiOutlineDotsVertical />
+							</button>
+							{openMenuId === post.photoPostId && (
+								<div css={s.dropdownMenu} ref={menuRef}>
+									<button css={s.dropdownItem}>
+										<MdEdit />
+									</button>
+									<button
+										css={s.dropdownItem}
+										onClick={() =>
+											handleRemovePostClick(
+												post.photoPostId
+											)
+										}
+									>
+										<FaTrashAlt />
+									</button>
+								</div>
+							)}
 						</div>
 						<div css={s.postImage}>
 							<img src={post.imgUrl} alt={"게시물 이미지"} />
