@@ -44,3 +44,21 @@ export const removePhotoPost = async (params) => {
 		return error;
 	}
 };
+
+export const addLike = async (data) => {
+	try {
+		const response = instance.post("/post/photo/like/add", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const removeLike = async (data) => {
+	try {
+		const response = instance.post("/post/photo/like/remove", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

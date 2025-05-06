@@ -8,13 +8,16 @@ import { useEffect, useRef, useState } from "react";
 import { PhotoPost, principalData } from "../../types";
 import {
 	addComment,
+	addLike,
 	getPhotoPostListByUserId,
+	removeLike,
 	removePhotoPost,
 } from "../../apis/apis/postApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 
 function PostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
@@ -36,8 +39,10 @@ function PostPage() {
 	const { state } = useLocation();
 	const selectedPostId: number | undefined = state?.selectedPostId;
 	const postRefs = useRef<Record<number, HTMLDivElement | null>>({});
+	const hasScrolledRef = useRef(false);
 
 	useEffect(() => {
+		if (hasScrolledRef.current) return; // 이미 스크롤했다면 무시
 		if (selectedPostId == null) return;
 		const el = postRefs.current[selectedPostId];
 		if (!el) return;
@@ -47,6 +52,7 @@ function PostPage() {
 			top: elementY - headerHeight,
 			behavior: "smooth",
 		});
+		hasScrolledRef.current = true;
 	}, [selectedPostId, postGroup]);
 
 	useEffect(() => {
@@ -112,6 +118,58 @@ function PostPage() {
 		});
 	};
 
+	const toggleLikeClick = (postId: number) => {
+		if (postGroup.find((p) => p.photoPostId === postId)?.isLiked) {
+			console.log("좋아요 취소");
+			if (!principalData) {
+				setIsLoginOpen(true);
+				return;
+			}
+			removeLike({
+				userId: principalData.data.user.userId,
+				photoPostId: postId,
+			}).then((response) => {
+				if (params.id) {
+					getPhotoPostListByUserId(parseInt(params.id)).then(
+						(response) => {
+							const typedResponse = response as {
+								status: number;
+								data: PhotoPost[];
+							};
+							if (typedResponse.status === 200) {
+								setPostGroup(typedResponse.data);
+							}
+						}
+					);
+				}
+			});
+		} else {
+			console.log("좋아요");
+			if (!principalData) {
+				setIsLoginOpen(true);
+				return;
+			}
+			addLike({
+				userId: principalData.data.user.userId,
+				photoPostId: postId,
+			}).then((response) => {
+				if (params.id) {
+					getPhotoPostListByUserId(parseInt(params.id)).then(
+						(response) => {
+							const typedResponse = response as {
+								status: number;
+								data: PhotoPost[];
+							};
+							if (typedResponse.status === 200) {
+								setPostGroup(typedResponse.data);
+							}
+						}
+					);
+				}
+			});
+		}
+	};
+
 	const onSubmit = (e: any) => {
 		e.preventDefault();
 	};
@@ -164,8 +222,16 @@ function PostPage() {
 									src={post.user.profileImg}
 									alt={"프로필 이미지"}
 									css={s.avatar}
+									onClick={() =>
+										navigate(`/profile/${post.userId}`)
+									}
 								/>
-								<span css={s.username}>
+								<span
+									css={s.username}
+									onClick={() =>
+										navigate(`/profile/${post.userId}`)
+									}
+								>
 									{post.user.username}
 								</span>
 							</div>
@@ -205,14 +271,42 @@ function PostPage() {
 						</div>
 						<div css={s.btnBox}>
 							<p>
-								<AiFillLike /> 3개
+								{post.isLiked === 1 ? (
+									<IoMdHeart
+										onClick={() =>
+											toggleLikeClick(post.photoPostId)
+										}
+										style={{
+											marginRight: "5px",
+											cursor: "pointer",
+										}}
+									/>
+								) : (
+									<IoMdHeartEmpty
+										onClick={() =>
+											toggleLikeClick(post.photoPostId)
+										}
+										style={{
+											marginRight: "5px",
+											cursor: "pointer",
+										}}
+									/>
+								)}
+								{post.likeCount}
 							</p>
 							<p>
-								<FaComments /> 4개
+								<FaComments style={{ marginRight: "7px" }} />
+								{post.comments.length}
 							</p>
 						</div>
 						<div css={s.postCaption}>
-							<strong>{post.user.username}</strong>{" "}
+							<strong
+								onClick={() =>
+									navigate(`/profile/${post.userId}`)
+								}
+							>
+								{post.user.username}
+							</strong>{" "}
 							<span>{post.postText}</span>
 						</div>
 						{post.comments.length > 0 &&
@@ -230,7 +324,15 @@ function PostPage() {
 							<div css={s.comments}>
 								{post.comments.map((c, idx) => (
 									<p key={idx} css={s.commentLine}>
-										<strong>{c.user.username}</strong>{" "}
+										<strong
+											onClick={() =>
+												navigate(
+													`/profile/${c.user.userId}`
+												)
+											}
+										>
+											{c.user.username}
+										</strong>{" "}
 										{c.content}
 									</p>
 								))}

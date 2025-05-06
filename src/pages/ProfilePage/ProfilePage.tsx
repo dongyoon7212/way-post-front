@@ -175,7 +175,7 @@ function ProfilePage() {
 						</div>
 						<div css={s.follow}>
 							<span>
-								게시물 <p>990</p>
+								게시물 <p>{postGroup.length}</p>
 							</span>
 							<span>
 								팔로워 <p>80.5만</p>

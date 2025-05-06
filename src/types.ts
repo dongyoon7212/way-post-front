@@ -48,6 +48,8 @@ export interface PhotoPost {
 	imgUrl: string;
 	cameraModel: string;
 	locationAddress: string;
+	isLiked: number;
+	likeCount: number;
 	latitude: number;
 	longitude: number;
 	regDt: string;

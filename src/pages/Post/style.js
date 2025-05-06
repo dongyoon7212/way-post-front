@@ -70,6 +70,13 @@ export const postHeader = css`
 export const profileBox = css`
 	display: flex;
 	align-items: center;
+	& > img {
+		cursor: pointer;
+	}
+
+	& > span {
+		cursor: pointer;
+	}
 `;
 
 export const dropdownBtn = css`
@@ -140,9 +147,12 @@ export const postImage = css`
 export const btnBox = css`
 	padding: 12px;
 	display: flex;
+	align-items: center;
 	& > p {
-		font-size: 15px;
+		font-size: 20px;
 		margin-right: 15px;
+		display: flex;
+		align-items: center;
 	}
 `;
 
@@ -154,6 +164,10 @@ export const postCaption = css`
 	& > strong {
 		margin-right: 4px;
 		font-weight: 600;
+		cursor: pointer;
+	}
+	& > span {
+		cursor: default;
 	}
 `;
 
@@ -169,9 +183,11 @@ export const comments = css`
 
 export const commentLine = css`
 	margin: 4px 0;
+	cursor: default;
 	& > strong {
 		margin-right: 4px;
 		font-weight: 600;
+		cursor: pointer;
 	}
 `;
 
