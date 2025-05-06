@@ -15,11 +15,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { MdEdit } from "react-icons/md";
 import { FaTrashAlt } from "react-icons/fa";
+import LoginModalComponent from "../../components/Login/LoginModalComponent";
+import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 
 function PostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [comment, setComment] = useState<string>("");
 	const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+	const [isLoginOpen, setIsLoginOpen] = useState(false);
+	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData<principalData>([
@@ -30,7 +34,7 @@ function PostPage() {
 	const { state } = useLocation();
 	const selectedPostId: number | undefined = state?.selectedPostId;
 	const postRefs = useRef<Record<number, HTMLDivElement | null>>({});
-
+	console.log(principalData);
 	useEffect(() => {
 		if (selectedPostId == null) return;
 		const el = postRefs.current[selectedPostId];
@@ -62,11 +66,20 @@ function PostPage() {
 	};
 
 	const handleCommentSubmit = (photoPostId: number, userId: number) => {
-		addComment({
-			photoPostId: photoPostId,
-			userId: userId,
-			content: comment,
-		}).then((response) => {});
+		if (principalData === undefined) {
+			alert("로그인 후 댓글을 작성해주세요.");
+			setIsLoginOpen(true);
+		} else {
+			if (comment.trim() === "") {
+				alert("댓글을 입력해주세요.");
+				return;
+			}
+			addComment({
+				photoPostId: photoPostId,
+				userId: userId,
+				content: comment,
+			}).then((response) => {});
+		}
 	};
 
 	const handleRemovePostClick = (id: Number) => {
@@ -86,8 +99,27 @@ function PostPage() {
 		}
 	};
 
+	const onSubmit = (e: any) => {
+		e.preventDefault();
+	};
+
 	return (
 		<div css={s.layout}>
+			{isLoginOpen && (
+				<LoginModalComponent
+					isOpen={isLoginOpen}
+					onClose={() => setIsLoginOpen(false)}
+					onSignUpOpen={() => {
+						setIsLoginOpen(false);
+						setIsSignUpOpen(true);
+					}}
+				/>
+			)}
+			<SignUpModalComponent
+				isOpen={isSignUpOpen}
+				onClose={() => setIsSignUpOpen(false)}
+				onLoginOpen={() => setIsLoginOpen(true)}
+			/>
 			<header css={s.headerLayout}>
 				<div css={s.headerBox}>
 					<button
@@ -177,7 +209,7 @@ function PostPage() {
 								</p>
 							))}
 						</div>
-						<form css={s.commentForm}>
+						<form css={s.commentForm} onSubmit={(e) => onSubmit(e)}>
 							<input
 								type="text"
 								placeholder="댓글 달기..."

@@ -196,7 +196,6 @@ function ProfilePage() {
 								handleCardClick(post.userId, post.photoPostId)
 							}
 						>
-							{/* 스켈레톤 + 실제 이미지 */}
 							<PhotoPostSkeleton
 								src={post.imgUrl}
 								alt={`게시물 이미지 ${index + 1}`}
