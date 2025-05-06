@@ -93,7 +93,7 @@ export const imgBox = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 `;
 
 export const textBox = css`
@@ -107,6 +107,18 @@ export const textBox = css`
 		height: auto;
 		font-size: 16px;
 		cursor: default;
+	}
+`;
+
+export const btnBox = css`
+	padding: 12px;
+	display: flex;
+	align-items: center;
+	& > p {
+		font-size: 20px;
+		margin-right: 15px;
+		display: flex;
+		align-items: center;
 	}
 `;
 

@@ -5,16 +5,18 @@ import { PhotoPostSkeleton } from "../PhotoPostSkeleton/PhotoPostSkeleton";
 import { IoCloseOutline } from "react-icons/io5";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { addComment } from "../../apis/apis/postApi";
+import { addComment, addLike, removeLike } from "../../apis/apis/postApi";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { FaComments } from "react-icons/fa6";
 
 interface Props {
 	isOpen: boolean;
 	onClose: () => void;
 	postGroup: PhotoPost[];
-	setLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function PhotoPostModal({ isOpen, onClose, postGroup, setLoginOpen }: Props) {
+function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 	const [expandedComments, setExpandedComments] = useState<Set<number>>(
 		new Set()
 	);
@@ -40,7 +42,7 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setLoginOpen }: Props) {
 	const handleCommentSubmit = (photoPostId: number, userId: number) => {
 		if (principalData === undefined) {
 			alert("로그인 후 댓글을 작성해주세요.");
-			setLoginOpen(true);
+			setIsLoginOpen(true);
 		} else {
 			if (comment.trim() === "") {
 				alert("댓글을 입력해주세요.");
@@ -53,6 +55,30 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setLoginOpen }: Props) {
 			}).then((response) => {
 				window.location.reload();
 			});
+		}
+	};
+
+	const toggleLikeClick = (postId: number) => {
+		if (postGroup.find((p) => p.photoPostId === postId)?.isLiked) {
+			console.log("좋아요 취소");
+			if (!principalData) {
+				setIsLoginOpen(true);
+				return;
+			}
+			removeLike({
+				userId: principalData.data.user.userId,
+				photoPostId: postId,
+			}).then((response) => {});
+		} else {
+			console.log("좋아요");
+			if (!principalData) {
+				setIsLoginOpen(true);
+				return;
+			}
+			addLike({
+				userId: principalData.data.user.userId,
+				photoPostId: postId,
+			}).then((response) => {});
 		}
 	};
 
@@ -86,6 +112,36 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setLoginOpen }: Props) {
 								src={post.imgUrl}
 								alt={`게시물 이미지 ${id + 1}`}
 							/>
+						</div>
+						<div css={s.btnBox}>
+							<p>
+								{post.isLiked === 1 ? (
+									<IoMdHeart
+										onClick={() =>
+											toggleLikeClick(post.photoPostId)
+										}
+										style={{
+											marginRight: "5px",
+											cursor: "pointer",
+										}}
+									/>
+								) : (
+									<IoMdHeartEmpty
+										onClick={() =>
+											toggleLikeClick(post.photoPostId)
+										}
+										style={{
+											marginRight: "5px",
+											cursor: "pointer",
+										}}
+									/>
+								)}
+								{post.likeCount}
+							</p>
+							<p>
+								<FaComments style={{ marginRight: "7px" }} />
+								{post.comments.length}
+							</p>
 						</div>
 						<div css={s.textBox}>
 							<p>{post.postText}</p>
