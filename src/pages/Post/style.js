@@ -175,6 +175,16 @@ export const commentLine = css`
 	}
 `;
 
+export const viewCommentsBtn = css`
+	background: none;
+	border: none;
+	color: #0095f6;
+	font-size: 14px;
+	margin: 8px 12px;
+	cursor: pointer;
+	text-align: left;
+`;
+
 // 5. Comment form
 export const commentForm = css`
 	display: flex;

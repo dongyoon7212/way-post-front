@@ -22,6 +22,10 @@ function PostPage() {
 	const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+	const [expandedComments, setExpandedComments] = useState<Set<number>>(
+		new Set()
+	);
+
 	const menuRef = useRef<HTMLDivElement>(null);
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData<principalData>([
@@ -32,7 +36,7 @@ function PostPage() {
 	const { state } = useLocation();
 	const selectedPostId: number | undefined = state?.selectedPostId;
 	const postRefs = useRef<Record<number, HTMLDivElement | null>>({});
-	console.log(principalData);
+
 	useEffect(() => {
 		if (selectedPostId == null) return;
 		const el = postRefs.current[selectedPostId];
@@ -76,7 +80,9 @@ function PostPage() {
 				photoPostId: photoPostId,
 				userId: userId,
 				content: comment,
-			}).then((response) => {});
+			}).then((response) => {
+				window.location.reload();
+			});
 		}
 	};
 
@@ -95,6 +101,15 @@ function PostPage() {
 				}
 			});
 		}
+	};
+
+	const toggleComments = (postId: number) => {
+		setExpandedComments((prev) => {
+			const next = new Set(prev);
+			if (next.has(postId)) next.delete(postId);
+			else next.add(postId);
+			return next;
+		});
 	};
 
 	const onSubmit = (e: any) => {
@@ -200,14 +215,27 @@ function PostPage() {
 							<strong>{post.user.username}</strong>{" "}
 							<span>{post.postText}</span>
 						</div>
-						<div css={s.comments}>
-							{post.comments.map((comment, id) => (
-								<p key={id} css={s.commentLine}>
-									<strong>{comment.user.username}</strong>{" "}
-									{comment.content}
-								</p>
-							))}
-						</div>
+						{post.comments.length > 0 &&
+							!expandedComments.has(post.photoPostId) && (
+								<button
+									css={s.viewCommentsBtn}
+									onClick={() =>
+										toggleComments(post.photoPostId)
+									}
+								>
+									댓글 {post.comments.length}개 모두 보기
+								</button>
+							)}
+						{expandedComments.has(post.photoPostId) && (
+							<div css={s.comments}>
+								{post.comments.map((c, idx) => (
+									<p key={idx} css={s.commentLine}>
+										<strong>{c.user.username}</strong>{" "}
+										{c.content}
+									</p>
+								))}
+							</div>
+						)}
 						<form css={s.commentForm} onSubmit={(e) => onSubmit(e)}>
 							<input
 								type="text"
