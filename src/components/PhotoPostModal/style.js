@@ -49,6 +49,7 @@ export const postContainer = css`
 
 export const postBox = css`
 	width: 100%;
+	height: auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -97,14 +98,13 @@ export const imgBox = css`
 
 export const textBox = css`
 	width: 100%;
-	height: 100%;
+	height: auto;
 	display: flex;
-	align-items: center;
 
 	& > p {
 		padding: 10px;
 		width: 100%;
-		height: 100%;
+		height: auto;
 		font-size: 16px;
 		cursor: default;
 	}
@@ -112,12 +112,69 @@ export const textBox = css`
 
 export const commentBox = css`
 	display: flex;
-	justify-content: end;
+	flex-direction: column;
 	margin-bottom: 20px;
 	cursor: default;
 
 	& > p {
 		font-size: 17px;
 		margin-right: 10px;
+	}
+`;
+
+export const comments = css`
+	overflow-y: auto;
+	padding: 0 12px;
+	font-size: 14px;
+	color: #262626;
+	margin: 10px 0;
+`;
+
+export const commentLine = css`
+	margin: 4px 0;
+	& > strong {
+		margin-right: 4px;
+		font-weight: 600;
+	}
+`;
+
+export const viewCommentsBtn = css`
+	background: none;
+	border: none;
+	color: #0095f6;
+	font-size: 14px;
+	margin: 8px 12px;
+	cursor: pointer;
+	text-align: left;
+`;
+
+export const commentForm = css`
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+`;
+
+export const commentInput = css`
+	flex: 1;
+	border: none;
+	font-size: 14px;
+	&::placeholder {
+		color: #999;
+	}
+	&:focus {
+		outline: none;
+	}
+`;
+
+export const commentButton = css`
+	background: none;
+	border: none;
+	color: #0095f6;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	&:disabled {
+		opacity: 0.4;
+		cursor: default;
 	}
 `;
