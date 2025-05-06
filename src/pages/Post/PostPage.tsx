@@ -13,8 +13,6 @@ import {
 } from "../../apis/apis/postApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { MdEdit } from "react-icons/md";
-import { FaTrashAlt } from "react-icons/fa";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 
@@ -156,23 +154,24 @@ function PostPage() {
 									{post.user.username}
 								</span>
 							</div>
-							<button
-								css={s.dropdownBtn}
-								onClick={() =>
-									setOpenMenuId(
-										openMenuId === post.photoPostId
-											? null
-											: post.photoPostId
-									)
-								}
-							>
-								<HiOutlineDotsVertical />
-							</button>
+							{principalData?.data.user.userId ===
+								post.userId && (
+								<button
+									css={s.dropdownBtn}
+									onClick={() =>
+										setOpenMenuId(
+											openMenuId === post.photoPostId
+												? null
+												: post.photoPostId
+										)
+									}
+								>
+									<HiOutlineDotsVertical />
+								</button>
+							)}
 							{openMenuId === post.photoPostId && (
 								<div css={s.dropdownMenu} ref={menuRef}>
-									<button css={s.dropdownItem}>
-										<MdEdit />
-									</button>
+									<button css={s.dropdownItem}>수정</button>
 									<button
 										css={s.dropdownItem}
 										onClick={() =>
@@ -181,7 +180,7 @@ function PostPage() {
 											)
 										}
 									>
-										<FaTrashAlt />
+										삭제
 									</button>
 								</div>
 							)}
