@@ -4,6 +4,7 @@ import MainPage from "../pages/Main/MainPage";
 import NewPostPage from "../pages/NewPost/NewPostPage";
 import PostPage from "../pages/Post/PostPage";
 import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import HotPostPage from "../pages/HotPost/HotPostPage";
 
 function MainRoute() {
 	return (
@@ -13,6 +14,7 @@ function MainRoute() {
 				<Route path="/profile/:id" element={<ProfilePage />} />
 				<Route path="/new-post" element={<NewPostPage />} />
 				<Route path="/post/:id" element={<PostPage />} />
+				<Route path="/hot-post" element={<HotPostPage />} />
 			</Routes>
 		</>
 	);

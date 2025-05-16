@@ -6,6 +6,8 @@ import { BsFire } from "react-icons/bs";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { useQueryClient } from "@tanstack/react-query";
 import { instance } from "../../apis/utils/instance";
+import logo2 from "../../assets/logo2.png";
+import { useNavigate } from "react-router-dom";
 
 function SideBarComponent({
 	isOpen,
@@ -18,6 +20,7 @@ function SideBarComponent({
 }) {
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData(["getPrincipal"]);
+	const navigate = useNavigate();
 
 	const sidebarRef = useRef<HTMLDivElement>(null);
 	// 사이드바 외부 클릭 감지
@@ -58,9 +61,12 @@ function SideBarComponent({
 			<button onClick={onClose} css={s.closeBtn}>
 				<IoCloseOutline />
 			</button>
+			<div css={s.logoBox}>
+				<img src={logo2} />
+			</div>
 			<nav css={s.menu}>
 				<ul>
-					<li>
+					<li onClick={() => navigate("/hot-post")}>
 						<div css={s.menuIcon}>
 							<BsFire />
 						</div>

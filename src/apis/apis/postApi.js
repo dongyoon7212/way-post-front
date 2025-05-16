@@ -11,7 +11,7 @@ export const uploadPhotoPost = async (data) => {
 
 export const getPhotoPostList = async (params) => {
 	try {
-		const response = instance.get("/post/photo/getlist", { params });
+		const response = instance.get("/post/photo/getList", { params });
 		return response;
 	} catch (error) {
 		return error;
@@ -20,7 +20,7 @@ export const getPhotoPostList = async (params) => {
 
 export const getPhotoPostListByUserId = async (params) => {
 	try {
-		const response = instance.get(`/post/photo/getlist/${params}`);
+		const response = instance.get(`/post/photo/getList/${params}`);
 		return response;
 	} catch (error) {
 		return error;
@@ -57,6 +57,15 @@ export const addLike = async (data) => {
 export const removeLike = async (data) => {
 	try {
 		const response = instance.post("/post/photo/like/remove", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const getHotPhotoPostList = async () => {
+	try {
+		const response = instance.get("/post/photo/getList/hot");
 		return response;
 	} catch (error) {
 		return error;

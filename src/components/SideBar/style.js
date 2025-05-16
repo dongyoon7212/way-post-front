@@ -36,10 +36,21 @@ export const closeBtn = css`
 	}
 `;
 
+export const logoBox = css`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	& > img {
+		width: 60%;
+		height: auto;
+	}
+`;
+
 export const menu = css`
 	width: 100%;
 	text-align: start;
-	margin-top: 100px;
 
 	ul {
 		list-style: none;
