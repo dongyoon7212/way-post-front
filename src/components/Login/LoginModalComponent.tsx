@@ -3,7 +3,7 @@ import * as s from "./style";
 import { SiNaver } from "react-icons/si";
 import { SiKakaotalk } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
-
+import logo2 from "../../assets/logo2.png";
 import React, { useState } from "react";
 import { signinRequest } from "../../apis/apis/authApi";
 
@@ -60,8 +60,9 @@ function LoginModalComponent({
 				<button css={s.closeBtn} onClick={onClose}>
 					✕
 				</button>
+				<img src={logo2} css={s.logo} />
 				<h2>로그인</h2>
-				<p>Way-Post에 오신 것을 환영합니다</p>
+				{/* <p>Way-Post에 오신 것을 환영합니다</p> */}
 				<div css={s.inputBox}>
 					<input
 						type="text"

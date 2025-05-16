@@ -7,6 +7,7 @@ import { PhotoPost, principalData, User } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
+import logo2 from "../../assets/logo2.png";
 import { v4 as uuid } from "uuid";
 import { editProfileImg, getUserById } from "../../apis/apis/accountApi";
 import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
@@ -113,14 +114,14 @@ function ProfilePage() {
 		<div css={s.layout}>
 			<div css={s.headerLayout}>
 				<div css={s.headerBox}>
-					<button
-						css={s.logo}
+					<div
+						css={s.logoBox}
 						onClick={() => {
 							navigate("/");
 						}}
 					>
-						Way-Post
-					</button>
+						<img src={logo2} alt="logo" />
+					</div>
 					<button css={s.menu}>
 						<LuAlignJustify />
 					</button>

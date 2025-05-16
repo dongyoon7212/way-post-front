@@ -53,6 +53,10 @@ export const closeBtn = css`
 	cursor: pointer;
 `;
 
+export const logo = css`
+	width: 60%;
+`;
+
 export const inputBox = css`
 	box-sizing: border-box;
 	display: flex;

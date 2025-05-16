@@ -30,12 +30,17 @@ export const headerBox = css`
 	align-items: center;
 `;
 
-export const logo = css`
-	font-size: 25px;
-	margin-left: 20px;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
+export const logoBox = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+
+	& > img {
+		height: 100%;
+		object-fit: cover;
+		cursor: pointer;
+	}
 `;
 
 export const menu = css`

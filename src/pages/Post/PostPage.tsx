@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { FaComments } from "react-icons/fa6";
+import logo2 from "../../assets/logo2.png";
 import { AiFillLike } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { PhotoPost, principalData } from "../../types";
@@ -193,14 +194,14 @@ function PostPage() {
 			/>
 			<header css={s.headerLayout}>
 				<div css={s.headerBox}>
-					<button
-						css={s.logo}
+					<div
+						css={s.logoBox}
 						onClick={() => {
 							navigate("/");
 						}}
 					>
-						Way-Post
-					</button>
+						<img src={logo2} alt="logo" />
+					</div>
 					<button css={s.menu}>
 						<LuAlignJustify />
 					</button>
