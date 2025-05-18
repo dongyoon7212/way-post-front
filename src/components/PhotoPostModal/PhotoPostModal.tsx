@@ -3,28 +3,51 @@ import * as s from "./style";
 import { PhotoPost, principalData } from "../../types";
 import { PhotoPostSkeleton } from "../PhotoPostSkeleton/PhotoPostSkeleton";
 import { IoCloseOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { addComment, addLike, removeLike } from "../../apis/apis/postApi";
+import {
+	addComment,
+	addLike,
+	getPhotoPostListByPosition,
+	removeLike,
+} from "../../apis/apis/postApi";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { FaComments } from "react-icons/fa6";
 
 interface Props {
 	isOpen: boolean;
 	onClose: () => void;
-	postGroup: PhotoPost[];
+	position: { latitude: number; longitude: number };
 	setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
+function PhotoPostModal({ isOpen, onClose, position, setIsLoginOpen }: Props) {
 	const [expandedComments, setExpandedComments] = useState<Set<number>>(
 		new Set()
 	);
+	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [comment, setComment] = useState<string>("");
 	const queryClient = useQueryClient();
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
+
+	useEffect(() => {
+		if (isOpen) {
+			getPhotoPostListByPosition({
+				latitude: position.latitude,
+				longitude: position.longitude,
+			}).then((response) => {
+				const typedResponse = response as {
+					status: number;
+					data: PhotoPost[];
+				};
+				if (typedResponse.status === 200) {
+					setPostGroup(typedResponse.data);
+				}
+			});
+		}
+	}, [isOpen, position]);
 
 	const toggleComments = (postId: number) => {
 		setExpandedComments((prev) => {
@@ -60,7 +83,6 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 
 	const toggleLikeClick = (postId: number) => {
 		if (postGroup.find((p) => p.photoPostId === postId)?.isLiked) {
-			console.log("좋아요 취소");
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
@@ -68,9 +90,21 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 			removeLike({
 				userId: principalData.data.user.userId,
 				photoPostId: postId,
-			}).then((response) => {});
+			}).then((response) => {
+				getPhotoPostListByPosition({
+					latitude: postGroup[0]?.latitude,
+					longitude: postGroup[0]?.longitude,
+				}).then((response) => {
+					const typedResponse = response as {
+						status: number;
+						data: PhotoPost[];
+					};
+					if (typedResponse.status === 200) {
+						setPostGroup(typedResponse.data);
+					}
+				});
+			});
 		} else {
-			console.log("좋아요");
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
@@ -78,7 +112,20 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 			addLike({
 				userId: principalData.data.user.userId,
 				photoPostId: postId,
-			}).then((response) => {});
+			}).then((response) => {
+				getPhotoPostListByPosition({
+					latitude: postGroup[0]?.latitude,
+					longitude: postGroup[0]?.longitude,
+				}).then((response) => {
+					const typedResponse = response as {
+						status: number;
+						data: PhotoPost[];
+					};
+					if (typedResponse.status === 200) {
+						setPostGroup(typedResponse.data);
+					}
+				});
+			});
 		}
 	};
 
@@ -123,6 +170,8 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 										style={{
 											marginRight: "5px",
 											cursor: "pointer",
+											color: "#FF3B30",
+											fontSize: "1.3rem",
 										}}
 									/>
 								) : (
@@ -133,13 +182,21 @@ function PhotoPostModal({ isOpen, onClose, postGroup, setIsLoginOpen }: Props) {
 										style={{
 											marginRight: "5px",
 											cursor: "pointer",
+											color: "#bfbfbf",
+											fontSize: "1.3rem",
 										}}
 									/>
 								)}
 								{post.likeCount}
 							</p>
 							<p>
-								<FaComments style={{ marginRight: "7px" }} />
+								<FaComments
+									style={{
+										marginRight: "7px",
+										color: "#656565",
+										fontSize: "1.3rem",
+									}}
+								/>
 								{post.comments.length}
 							</p>
 						</div>

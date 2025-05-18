@@ -121,7 +121,6 @@ function PostPage() {
 
 	const toggleLikeClick = (postId: number) => {
 		if (postGroup.find((p) => p.photoPostId === postId)?.isLiked) {
-			console.log("좋아요 취소");
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
@@ -145,7 +144,6 @@ function PostPage() {
 				}
 			});
 		} else {
-			console.log("좋아요");
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
@@ -280,6 +278,8 @@ function PostPage() {
 										style={{
 											marginRight: "5px",
 											cursor: "pointer",
+											color: "#FF3B30",
+											fontSize: "1.3rem",
 										}}
 									/>
 								) : (
@@ -290,13 +290,21 @@ function PostPage() {
 										style={{
 											marginRight: "5px",
 											cursor: "pointer",
+											color: "#bfbfbf",
+											fontSize: "1.3rem",
 										}}
 									/>
 								)}
 								{post.likeCount}
 							</p>
 							<p>
-								<FaComments style={{ marginRight: "7px" }} />
+								<FaComments
+									style={{
+										marginRight: "7px",
+										color: "#656565",
+										fontSize: "1.3rem",
+									}}
+								/>
 								{post.comments.length}
 							</p>
 						</div>

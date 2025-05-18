@@ -153,7 +153,10 @@ function MainPage() {
 				<PhotoPostModal
 					isOpen={isPhotoPostModalOpen}
 					onClose={() => setIsPhotoPostModalOpen(false)}
-					postGroup={postGroup}
+					position={{
+						latitude: postGroup[0]?.latitude,
+						longitude: postGroup[0]?.longitude,
+					}}
 					setIsLoginOpen={setIsLoginOpen}
 					key={postGroup[0]?.photoPostId}
 				/>
