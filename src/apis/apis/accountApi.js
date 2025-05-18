@@ -17,3 +17,12 @@ export const getUserById = async (data) => {
 		return error;
 	}
 };
+
+export const editIntroduce = async (data) => {
+	try {
+		const response = instance.post("/account/edit/introduce", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

@@ -9,7 +9,11 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
 import logo2 from "../../assets/logo2.png";
 import { v4 as uuid } from "uuid";
-import { editProfileImg, getUserById } from "../../apis/apis/accountApi";
+import {
+	editIntroduce,
+	editProfileImg,
+	getUserById,
+} from "../../apis/apis/accountApi";
 import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
 import { PhotoPostSkeleton } from "../../components/PhotoPostSkeleton/PhotoPostSkeleton";
 
@@ -25,6 +29,8 @@ function ProfilePage() {
 	const params = useParams();
 	const [userData, setUserData] = useState<User>();
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
+	const [isIntroduceModalOpen, setIsIntroduceModalOpen] = useState(false);
+	const [newIntroduce, setNewIntroduce] = useState("");
 
 	useEffect(() => {
 		if (params.id) {
@@ -49,7 +55,23 @@ function ProfilePage() {
 		}
 	}, []);
 
-	console.log(postGroup);
+	const handleOpenIntroduceModal = () => {
+		setNewIntroduce(userData?.introduce || "");
+		setIsIntroduceModalOpen(true);
+	};
+
+	// 모달에서 “저장” 클릭
+	const handleSaveIntroduce = () => {
+		if (!principalData) return;
+		editIntroduce({
+			introduce: newIntroduce,
+		}).then((response) => {
+			if ((response as { status: number }).status === 200) {
+				setUserData((u) => (u ? { ...u, introduce: newIntroduce } : u));
+				setIsIntroduceModalOpen(false);
+			}
+		});
+	};
 
 	const handleProfileImageClick = () => {
 		fileInputRef.current?.click();
@@ -151,7 +173,7 @@ function ProfilePage() {
 								<>
 									<button
 										onClick={handleProfileImageClick}
-										css={s.editBtn}
+										css={s.editImgBtn}
 									>
 										{isUploading ? (
 											<p>
@@ -168,7 +190,13 @@ function ProfilePage() {
 										ref={fileInputRef}
 										style={{ display: "none" }}
 										onChange={handleImageUpload}
-									/>{" "}
+									/>
+									<button
+										css={s.editIntrodueceBtn}
+										onClick={handleOpenIntroduceModal}
+									>
+										<p>소개 변경</p>
+									</button>
 								</>
 							) : (
 								<></>
@@ -205,6 +233,36 @@ function ProfilePage() {
 					))}
 				</div>
 			</div>
+			{isIntroduceModalOpen && (
+				<div
+					css={s.bottomOverlay}
+					onClick={() => setIsIntroduceModalOpen(false)}
+				>
+					<div
+						css={s.bottomModal}
+						onClick={
+							(e) =>
+								e.stopPropagation() /* 배경 클릭 시 닫히지만, 모달 내부 클릭은 전파 방지 */
+						}
+					>
+						<h3>프로필 소개 수정</h3>
+						<textarea
+							css={s.introTextarea}
+							value={newIntroduce}
+							onChange={(e) => setNewIntroduce(e.target.value)}
+							rows={4}
+						/>
+						<div css={s.modalButtons}>
+							<button
+								onClick={() => setIsIntroduceModalOpen(false)}
+							>
+								취소
+							</button>
+							<button onClick={handleSaveIntroduce}>저장</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
