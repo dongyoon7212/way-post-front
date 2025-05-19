@@ -50,16 +50,18 @@ export const logoBox = css`
 
 export const menu = css`
 	width: 100%;
-	text-align: start;
+	text-align: center;
 
 	ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		margin-top: 20px;
 	}
 
 	li {
 		display: flex;
+		justify-content: center;
 		align-items: center;
 		font-size: 18px;
 		cursor: pointer;
@@ -72,8 +74,10 @@ export const menu = css`
 `;
 
 export const menuIcon = css`
-	padding: 18px;
-	font-size: 24px;
+	padding-right: 18px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	font-size: 30px;
 `;
 
 export const loginBtn = css`

@@ -68,13 +68,15 @@ function SideBarComponent({
 				<ul>
 					<li onClick={() => navigate("/hot-post")}>
 						<div css={s.menuIcon}>
-							<BsFire />
+							<BsFire style={{ color: "rgb(243, 36,19)" }} />
 						</div>
 						<p>인기 포스트</p>
 					</li>
 					<li>
 						<div css={s.menuIcon}>
-							<MdOutlineFiberNew />
+							<MdOutlineFiberNew
+								style={{ color: "rgb(231,179,24)" }}
+							/>
 						</div>
 						<p>최근 포스트</p>
 					</li>
