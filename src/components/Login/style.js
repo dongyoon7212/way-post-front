@@ -54,7 +54,7 @@ export const closeBtn = css`
 `;
 
 export const logo = css`
-	width: 60%;
+	width: 80%;
 `;
 
 export const inputBox = css`

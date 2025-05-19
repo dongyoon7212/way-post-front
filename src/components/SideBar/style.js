@@ -43,7 +43,7 @@ export const logoBox = css`
 	align-items: center;
 	margin-top: 20px;
 	& > img {
-		width: 60%;
+		width: 80%;
 		height: auto;
 	}
 `;
@@ -87,8 +87,9 @@ export const loginBtn = css`
 	border: none;
 	border-top: 1px solid #dbdbdb;
 	color: white;
-	background-color: #64afff;
+	background-color: rgb(52, 162, 220);
 	font-size: 16px;
+	font-weight: bolder;
 	cursor: pointer;
 	transition: background 0.2s ease-in-out;
 
