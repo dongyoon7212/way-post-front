@@ -63,9 +63,8 @@ function ProfilePage() {
 	// 모달에서 “저장” 클릭
 	const handleSaveIntroduce = () => {
 		if (!principalData) return;
-		editIntroduce({
-			introduce: newIntroduce,
-		}).then((response) => {
+		console.log("저장 클릭", newIntroduce);
+		editIntroduce({ introduce: newIntroduce }).then((response) => {
 			if ((response as { status: number }).status === 200) {
 				setUserData((u) => (u ? { ...u, introduce: newIntroduce } : u));
 				setIsIntroduceModalOpen(false);

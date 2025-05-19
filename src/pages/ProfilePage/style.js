@@ -78,8 +78,8 @@ export const profileImgBox = css`
 
 export const imgBox = css`
 	box-sizing: border-box;
-	width: 10vw;
-	height: 10vw;
+	width: 12vw;
+	height: 12vw;
 	border-radius: 50%;
 	border: 1px solid #dbdbdb;
 	overflow: hidden;
