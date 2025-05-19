@@ -72,7 +72,7 @@ function SideBarComponent({
 						</div>
 						<p>인기 포스트</p>
 					</li>
-					<li>
+					<li onClick={() => navigate("/recent-post")}>
 						<div css={s.menuIcon}>
 							<MdOutlineFiberNew
 								style={{ color: "rgb(231,179,24)" }}

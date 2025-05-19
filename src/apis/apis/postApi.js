@@ -72,6 +72,15 @@ export const getHotPhotoPostList = async () => {
 	}
 };
 
+export const getRecentPhotoPostList = async () => {
+	try {
+		const response = instance.get("/post/photo/getList/recent");
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
 export const getPhotoPostListByPosition = async (params) => {
 	try {
 		const response = instance.get("/post/photo/getList/position", {
