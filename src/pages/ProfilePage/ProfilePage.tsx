@@ -12,7 +12,9 @@ import { v4 as uuid } from "uuid";
 import {
 	editIntroduce,
 	editProfileImg,
+	follow,
 	getUserById,
+	unfollow,
 } from "../../apis/apis/accountApi";
 import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
 import { PhotoPostSkeleton } from "../../components/PhotoPostSkeleton/PhotoPostSkeleton";
@@ -131,6 +133,35 @@ function ProfilePage() {
 		);
 	};
 
+	const handleFollowClick = () => {
+		// 팔로우 버튼 클릭 시 동작
+		if (params.id) {
+			follow({ followeeId: params.id }).then((response) => {
+				const typedResponse = response as {
+					status: number;
+				};
+				if (typedResponse.status === 200) {
+					alert("팔로우 되었습니다.");
+					window.location.reload();
+				}
+			});
+		}
+	};
+
+	const handleUnfollowClick = () => {
+		if (params.id) {
+			unfollow({ followeeId: params.id }).then((response) => {
+				const typedResponse = response as {
+					status: number;
+				};
+				if (typedResponse.status === 200) {
+					alert("언팔로우 되었습니다.");
+					window.location.reload();
+				}
+			});
+		}
+	};
+
 	return (
 		<div css={s.layout}>
 			<div css={s.headerLayout}>
@@ -165,7 +196,25 @@ function ProfilePage() {
 								<></>
 							) : (
 								<>
-									<button css={s.followBtn}>팔로우</button>
+									{userData?.isFollowed == 0 ? (
+										<>
+											<button
+												css={s.followBtn}
+												onClick={handleFollowClick}
+											>
+												팔로우
+											</button>
+										</>
+									) : (
+										<>
+											<button
+												css={s.followBtn}
+												onClick={handleUnfollowClick}
+											>
+												언팔로우
+											</button>
+										</>
+									)}
 								</>
 							)}
 							{principalData?.data.user.userId == params?.id ? (

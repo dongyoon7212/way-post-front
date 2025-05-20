@@ -26,3 +26,21 @@ export const editIntroduce = async (data) => {
 		return error;
 	}
 };
+
+export const follow = async (data) => {
+	try {
+		const response = instance.post("/account/follow/add", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const unfollow = async (data) => {
+	try {
+		const response = instance.post("/account/follow/remove", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

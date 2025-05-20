@@ -11,6 +11,7 @@ export interface User {
 	profileImg: string;
 	userRoles: UserRole[];
 	introduce: string;
+	isFollowed: number;
 }
 
 export interface UserRole {

@@ -120,10 +120,13 @@ export const followBtn = css`
 	padding: 7px 16px;
 	border: none;
 	border-radius: 5px;
-	background-color: #007bff;
+	background-color: rgb(52, 162, 220);
 	color: white;
 	cursor: pointer;
 	font-size: 12px;
+	&:hover {
+		background-color: rgb(42, 142, 200);
+	}
 `;
 
 export const editImgBtn = css`
