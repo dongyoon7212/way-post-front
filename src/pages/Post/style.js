@@ -125,6 +125,7 @@ export const avatar = css`
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
+	border: 1px solid #dbdbdb;
 	object-fit: cover;
 	margin-right: 12px;
 `;

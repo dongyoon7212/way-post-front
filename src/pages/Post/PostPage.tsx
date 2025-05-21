@@ -4,7 +4,6 @@ import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { FaComments } from "react-icons/fa6";
 import logo2 from "../../assets/logo2.png";
-import { AiFillLike } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { PhotoPost, principalData } from "../../types";
 import {
@@ -19,6 +18,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import PostPageSkeleton from "../../components/PostPageSkeleton/PostPageSkeleton";
 
 function PostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
@@ -26,6 +26,7 @@ function PostPage() {
 	const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [expandedComments, setExpandedComments] = useState<Set<number>>(
 		new Set()
 	);
@@ -58,15 +59,20 @@ function PostPage() {
 
 	useEffect(() => {
 		if (params.id) {
-			getPhotoPostListByUserId(parseInt(params.id)).then((response) => {
-				const typedResponse = response as {
-					status: number;
-					data: PhotoPost[];
-				};
-				if (typedResponse.status === 200) {
-					setPostGroup(typedResponse.data);
-				}
-			});
+			setIsLoading(true); // 페칭 시작 전
+			getPhotoPostListByUserId(parseInt(params.id))
+				.then((response) => {
+					const typedResponse = response as {
+						status: number;
+						data: PhotoPost[];
+					};
+					if (typedResponse.status === 200) {
+						setPostGroup(typedResponse.data);
+					}
+				})
+				.finally(() => {
+					setIsLoading(false);
+				});
 		}
 	}, []);
 
@@ -206,170 +212,194 @@ function PostPage() {
 				</div>
 			</header>
 			<main css={s.feedLayout}>
-				{postGroup.map((post, id) => (
-					<article
-						key={id}
-						css={s.postCard}
-						ref={(el) =>
-							(postRefs.current[post.photoPostId] =
-								el as HTMLDivElement | null)
-						}
-					>
-						<div css={s.postHeader}>
-							<div css={s.profileBox}>
-								<img
-									src={post.user.profileImg}
-									alt={"프로필 이미지"}
-									css={s.avatar}
-									onClick={() =>
-										navigate(`/profile/${post.userId}`)
-									}
-								/>
-								<span
-									css={s.username}
-									onClick={() =>
-										navigate(`/profile/${post.userId}`)
-									}
-								>
-									{post.user.username}
-								</span>
-							</div>
-							{principalData?.data.user.userId ===
-								post.userId && (
-								<button
-									css={s.dropdownBtn}
-									onClick={() =>
-										setOpenMenuId(
-											openMenuId === post.photoPostId
-												? null
-												: post.photoPostId
-										)
-									}
-								>
-									<HiOutlineDotsVertical />
-								</button>
-							)}
-							{openMenuId === post.photoPostId && (
-								<div css={s.dropdownMenu} ref={menuRef}>
-									<button css={s.dropdownItem}>수정</button>
-									<button
-										css={s.dropdownItem}
-										onClick={() =>
-											handleRemovePostClick(
-												post.photoPostId
-											)
-										}
-									>
-										삭제
-									</button>
-								</div>
-							)}
-						</div>
-						<div css={s.postImage}>
-							<img src={post.imgUrl} alt={"게시물 이미지"} />
-						</div>
-						<div css={s.btnBox}>
-							<p>
-								{post.isLiked === 1 ? (
-									<IoMdHeart
-										onClick={() =>
-											toggleLikeClick(post.photoPostId)
-										}
-										style={{
-											marginRight: "5px",
-											cursor: "pointer",
-											color: "#FF3B30",
-											fontSize: "1.3rem",
-										}}
-									/>
-								) : (
-									<IoMdHeartEmpty
-										onClick={() =>
-											toggleLikeClick(post.photoPostId)
-										}
-										style={{
-											marginRight: "5px",
-											cursor: "pointer",
-											color: "#bfbfbf",
-											fontSize: "1.3rem",
-										}}
-									/>
-								)}
-								{post.likeCount}
-							</p>
-							<p>
-								<FaComments
-									style={{
-										marginRight: "7px",
-										color: "#656565",
-										fontSize: "1.3rem",
-									}}
-								/>
-								{post.comments.length}
-							</p>
-						</div>
-						<div css={s.postCaption}>
-							<strong
-								onClick={() =>
-									navigate(`/profile/${post.userId}`)
+				{isLoading
+					? // 3개짜리 스켈레톤을 보여줄 거면
+					  Array(3)
+							.fill(null)
+							.map((_, i) => <PostPageSkeleton key={i} />)
+					: postGroup.map((post, id) => (
+							<article
+								key={id}
+								css={s.postCard}
+								ref={(el) =>
+									(postRefs.current[post.photoPostId] =
+										el as HTMLDivElement | null)
 								}
 							>
-								{post.user.username}
-							</strong>{" "}
-							<span>{post.postText}</span>
-						</div>
-						{post.comments.length > 0 &&
-							!expandedComments.has(post.photoPostId) && (
-								<button
-									css={s.viewCommentsBtn}
-									onClick={() =>
-										toggleComments(post.photoPostId)
-									}
-								>
-									댓글 {post.comments.length}개 모두 보기
-								</button>
-							)}
-						{expandedComments.has(post.photoPostId) && (
-							<div css={s.comments}>
-								{post.comments.map((c, idx) => (
-									<p key={idx} css={s.commentLine}>
-										<strong
+								<div css={s.postHeader}>
+									<div css={s.profileBox}>
+										<img
+											src={post.user.profileImg}
+											alt={"프로필 이미지"}
+											css={s.avatar}
 											onClick={() =>
 												navigate(
-													`/profile/${c.user.userId}`
+													`/profile/${post.userId}`
+												)
+											}
+										/>
+										<span
+											css={s.username}
+											onClick={() =>
+												navigate(
+													`/profile/${post.userId}`
 												)
 											}
 										>
-											{c.user.username}
-										</strong>{" "}
-										{c.content}
+											{post.user.username}
+										</span>
+									</div>
+									{principalData?.data.user.userId ===
+										post.userId && (
+										<button
+											css={s.dropdownBtn}
+											onClick={() =>
+												setOpenMenuId(
+													openMenuId ===
+														post.photoPostId
+														? null
+														: post.photoPostId
+												)
+											}
+										>
+											<HiOutlineDotsVertical />
+										</button>
+									)}
+									{openMenuId === post.photoPostId && (
+										<div css={s.dropdownMenu} ref={menuRef}>
+											<button css={s.dropdownItem}>
+												수정
+											</button>
+											<button
+												css={s.dropdownItem}
+												onClick={() =>
+													handleRemovePostClick(
+														post.photoPostId
+													)
+												}
+											>
+												삭제
+											</button>
+										</div>
+									)}
+								</div>
+								<div css={s.postImage}>
+									<img
+										src={post.imgUrl}
+										alt={"게시물 이미지"}
+									/>
+								</div>
+								<div css={s.btnBox}>
+									<p>
+										{post.isLiked === 1 ? (
+											<IoMdHeart
+												onClick={() =>
+													toggleLikeClick(
+														post.photoPostId
+													)
+												}
+												style={{
+													marginRight: "5px",
+													cursor: "pointer",
+													color: "#FF3B30",
+													fontSize: "1.3rem",
+												}}
+											/>
+										) : (
+											<IoMdHeartEmpty
+												onClick={() =>
+													toggleLikeClick(
+														post.photoPostId
+													)
+												}
+												style={{
+													marginRight: "5px",
+													cursor: "pointer",
+													color: "#bfbfbf",
+													fontSize: "1.3rem",
+												}}
+											/>
+										)}
+										{post.likeCount}
 									</p>
-								))}
-							</div>
-						)}
-						<form css={s.commentForm} onSubmit={(e) => onSubmit(e)}>
-							<input
-								type="text"
-								placeholder="댓글 달기..."
-								css={s.commentInput}
-								onChange={handleCommentChange}
-								value={comment}
-							/>
-							<button
-								type="submit"
-								css={s.commentButton}
-								onClick={() => {
-									handleCommentSubmit(
-										post.photoPostId,
-										principalData?.data.user.userId ?? 0
-									);
-								}}
-							>
-								게시
-							</button>
-						</form>
-					</article>
-				))}
+									<p>
+										<FaComments
+											style={{
+												marginRight: "7px",
+												color: "#656565",
+												fontSize: "1.3rem",
+											}}
+										/>
+										{post.comments.length}
+									</p>
+								</div>
+								<div css={s.postCaption}>
+									<strong
+										onClick={() =>
+											navigate(`/profile/${post.userId}`)
+										}
+									>
+										{post.user.username}
+									</strong>{" "}
+									<span>{post.postText}</span>
+								</div>
+								{post.comments.length > 0 &&
+									!expandedComments.has(post.photoPostId) && (
+										<button
+											css={s.viewCommentsBtn}
+											onClick={() =>
+												toggleComments(post.photoPostId)
+											}
+										>
+											댓글 {post.comments.length}개 모두
+											보기
+										</button>
+									)}
+								{expandedComments.has(post.photoPostId) && (
+									<div css={s.comments}>
+										{post.comments.map((c, idx) => (
+											<p key={idx} css={s.commentLine}>
+												<strong
+													onClick={() =>
+														navigate(
+															`/profile/${c.user.userId}`
+														)
+													}
+												>
+													{c.user.username}
+												</strong>{" "}
+												{c.content}
+											</p>
+										))}
+									</div>
+								)}
+								<form
+									css={s.commentForm}
+									onSubmit={(e) => onSubmit(e)}
+								>
+									<input
+										type="text"
+										placeholder="댓글 달기..."
+										css={s.commentInput}
+										onChange={handleCommentChange}
+										value={comment}
+									/>
+									<button
+										type="submit"
+										css={s.commentButton}
+										onClick={() => {
+											handleCommentSubmit(
+												post.photoPostId,
+												principalData?.data.user
+													.userId ?? 0
+											);
+										}}
+									>
+										게시
+									</button>
+								</form>
+							</article>
+					  ))}
 			</main>
 		</div>
 	);

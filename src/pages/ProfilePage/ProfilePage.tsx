@@ -18,12 +18,16 @@ import {
 } from "../../apis/apis/accountApi";
 import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
 import { PhotoPostSkeleton } from "../../components/PhotoPostSkeleton/PhotoPostSkeleton";
+import LoginModalComponent from "../../components/Login/LoginModalComponent";
+import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 
 function ProfilePage() {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [uploadProgress, setUploadProgress] = useState(0);
+	const [isLoginOpen, setIsLoginOpen] = useState(false);
+	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
@@ -135,6 +139,11 @@ function ProfilePage() {
 
 	const handleFollowClick = () => {
 		// 팔로우 버튼 클릭 시 동작
+		if (!principalData) {
+			alert("로그인 후 사용해주세요.");
+			setIsLoginOpen(true);
+			return;
+		}
 		if (params.id) {
 			follow({ followeeId: params.id }).then((response) => {
 				const typedResponse = response as {
@@ -164,6 +173,21 @@ function ProfilePage() {
 
 	return (
 		<div css={s.layout}>
+			{isLoginOpen && (
+				<LoginModalComponent
+					isOpen={isLoginOpen}
+					onClose={() => setIsLoginOpen(false)}
+					onSignUpOpen={() => {
+						setIsLoginOpen(false);
+						setIsSignUpOpen(true);
+					}}
+				/>
+			)}
+			<SignUpModalComponent
+				isOpen={isSignUpOpen}
+				onClose={() => setIsSignUpOpen(false)}
+				onLoginOpen={() => setIsLoginOpen(true)}
+			/>
 			<div css={s.headerLayout}>
 				<div css={s.headerBox}>
 					<div
@@ -192,11 +216,11 @@ function ProfilePage() {
 					<div css={s.profileInfoBox}>
 						<div css={s.profileName}>
 							<span>{userData?.username}</span>
-							{principalData?.data.user.userId == params?.id ? (
+							{principalData?.data.user.userId === params?.id ? (
 								<></>
 							) : (
 								<>
-									{userData?.isFollowed == 0 ? (
+									{userData?.isFollowed === 0 ? (
 										<>
 											<button
 												css={s.followBtn}
@@ -217,7 +241,7 @@ function ProfilePage() {
 									)}
 								</>
 							)}
-							{principalData?.data.user.userId == params?.id ? (
+							{principalData?.data.user.userId === params?.id ? (
 								<>
 									<button
 										onClick={handleProfileImageClick}
