@@ -129,9 +129,37 @@ export const followBtn = css`
 	}
 `;
 
+export const settingBtn = css`
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	border: none;
+	background-color: white;
+	font-size: 20px;
+	cursor: pointer;
+`;
+
+export const menuWrapper = (isMenuOpen) => css`
+	width: auto;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: ${isMenuOpen
+		? "50px"
+		: "40px"}; /* 열린 상태엔 50px, 닫힌 상태엔 40px */
+	right: 20px;
+	opacity: ${isMenuOpen ? "1" : "0"};
+	transform: translateY(${isMenuOpen ? "0" : "-10px"});
+	transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out,
+		transform 0.3s ease-in-out;
+	pointer-events: ${isMenuOpen ? "auto" : "none"};
+`;
+
 export const editImgBtn = css`
 	position: absolute;
-	top: 0;
+	width: 100px;
+	top: 0px;
 	right: 0;
 	padding: 7px 16px;
 	background-color: white;
@@ -148,7 +176,44 @@ export const editImgBtn = css`
 
 export const editIntrodueceBtn = css`
 	position: absolute;
+	width: 100px;
 	top: 35px;
+	right: 0;
+	padding: 7px 16px;
+	background-color: white;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 12px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #f0f0f0;
+	}
+`;
+
+export const deleteAccountBtn = css`
+	position: absolute;
+	width: 100px;
+	top: 70px;
+	right: 0;
+	padding: 7px 16px;
+	background-color: white;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 12px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #f0f0f0;
+	}
+`;
+
+export const logoutBtn = css`
+	position: absolute;
+	width: 100px;
+	top: 105px;
 	right: 0;
 	padding: 7px 16px;
 	background-color: white;

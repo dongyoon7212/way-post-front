@@ -206,9 +206,6 @@ function PostPage() {
 					>
 						<img src={logo2} alt="logo" />
 					</div>
-					<button css={s.menu}>
-						<LuAlignJustify />
-					</button>
 				</div>
 			</header>
 			<main css={s.feedLayout}>

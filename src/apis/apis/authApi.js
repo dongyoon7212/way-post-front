@@ -50,3 +50,13 @@ export const signinRequest = async (data) => {
 		return error.response;
 	}
 };
+
+export const deactivateAccountRequest = async (data) => {
+	try {
+		const response = instance.post("/auth/account/deactivate", data);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error.response;
+	}
+};

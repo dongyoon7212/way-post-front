@@ -43,14 +43,6 @@ export const logoBox = css`
 	}
 `;
 
-export const menu = css`
-	font-size: 20px;
-	margin-right: 20px;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-`;
-
 export const feedLayout = css`
 	width: 37vw;
 	min-height: 92vh;

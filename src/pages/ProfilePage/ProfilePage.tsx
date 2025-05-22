@@ -20,6 +20,9 @@ import { getPhotoPostListByUserId } from "../../apis/apis/postApi";
 import { PhotoPostSkeleton } from "../../components/PhotoPostSkeleton/PhotoPostSkeleton";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
+import { IoMdSettings } from "react-icons/io";
+import { instance } from "../../apis/utils/instance";
+import { deactivateAccountRequest } from "../../apis/apis/authApi";
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -29,6 +32,7 @@ function ProfilePage() {
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
 	const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
@@ -171,6 +175,27 @@ function ProfilePage() {
 		}
 	};
 
+	const handleDeactivateAccountClick = () => {
+		// if (window.confirm("정말로 계정을 탈퇴하시겠습니까?")) {
+		// 	if (!principalData) return;
+		// 	deactivateAccountRequest({
+
+		// 	})
+		// }
+		navigate("/deactivate-account");
+	};
+
+	const handleLogoutClick = () => {
+		localStorage.removeItem("accessToken");
+		instance.interceptors.request.use((config) => {
+			config.headers.Authorization = null;
+			return config;
+		});
+		queryClient.refetchQueries({ queryKey: ["getPrincipal"] });
+		alert("로그아웃 되었습니다.");
+		window.location.href = "/";
+	};
+
 	return (
 		<div css={s.layout}>
 			{isLoginOpen && (
@@ -198,9 +223,6 @@ function ProfilePage() {
 					>
 						<img src={logo2} alt="logo" />
 					</div>
-					<button css={s.menu}>
-						<LuAlignJustify />
-					</button>
 				</div>
 			</div>
 			<div css={s.contentLayout}>
@@ -244,31 +266,56 @@ function ProfilePage() {
 							{principalData?.data.user.userId == params?.id ? (
 								<>
 									<button
-										onClick={handleProfileImageClick}
-										css={s.editImgBtn}
+										css={s.settingBtn}
+										onClick={() =>
+											setIsMenuOpen(!isMenuOpen)
+										}
 									>
-										{isUploading ? (
-											<p>
-												업로드 중...{" "}
-												{Math.round(uploadProgress)}%
-											</p>
-										) : (
-											<p>프로필 변경</p>
-										)}
+										<IoMdSettings />
 									</button>
-									<input
-										type="file"
-										accept="image/*"
-										ref={fileInputRef}
-										style={{ display: "none" }}
-										onChange={handleImageUpload}
-									/>
-									<button
-										css={s.editIntrodueceBtn}
-										onClick={handleOpenIntroduceModal}
-									>
-										<p>소개 변경</p>
-									</button>
+									<div css={s.menuWrapper(isMenuOpen)}>
+										<button
+											onClick={handleProfileImageClick}
+											css={s.editImgBtn}
+										>
+											{isUploading ? (
+												<p>
+													업로드 중...{" "}
+													{Math.round(uploadProgress)}
+													%
+												</p>
+											) : (
+												<p>프로필 변경</p>
+											)}
+										</button>
+										<input
+											type="file"
+											accept="image/*"
+											ref={fileInputRef}
+											style={{ display: "none" }}
+											onChange={handleImageUpload}
+										/>
+										<button
+											css={s.editIntrodueceBtn}
+											onClick={handleOpenIntroduceModal}
+										>
+											<p>소개 변경</p>
+										</button>
+										<button
+											css={s.deleteAccountBtn}
+											onClick={
+												handleDeactivateAccountClick
+											}
+										>
+											<p>계정 탈퇴</p>
+										</button>
+										<button
+											css={s.logoutBtn}
+											onClick={handleLogoutClick}
+										>
+											<p>로그아웃</p>
+										</button>
+									</div>
 								</>
 							) : (
 								<></>

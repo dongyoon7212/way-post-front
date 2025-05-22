@@ -6,6 +6,7 @@ import PostPage from "../pages/Post/PostPage";
 import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import HotPostPage from "../pages/HotPost/HotPostPage";
 import RecentPostPage from "../pages/RecentPost/RecentPostPage";
+import DeactivateAccountPage from "../pages/DeactivateAccount/DeactivateAccountPage";
 
 function MainRoute() {
 	return (
@@ -17,6 +18,10 @@ function MainRoute() {
 				<Route path="/post/:id" element={<PostPage />} />
 				<Route path="/hot-post" element={<HotPostPage />} />
 				<Route path="/recent-post" element={<RecentPostPage />} />
+				<Route
+					path="/deactivate-account"
+					element={<DeactivateAccountPage />}
+				/>
 			</Routes>
 		</>
 	);
