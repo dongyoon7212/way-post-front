@@ -8,12 +8,13 @@ export const layout = (isOpen) => css`
 		? "translateY(-50%) translateX(10px)"
 		: "translateY(-50%) translateX(-100%)"};
 	z-index: 1000;
+	opacity: ${isOpen ? "1" : "0"};
 	width: 15vw;
 	height: 97vh;
 	border-radius: 20px;
 	background-color: white; /* 조금 더 차분한 회색 */
 	box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.3); /* 부드러운 그림자 */
-	transition: transform 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
 `;
 
 export const closeBtn = css`

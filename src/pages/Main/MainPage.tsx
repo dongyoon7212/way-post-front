@@ -4,6 +4,7 @@ import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { IoMdLogIn } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
+import { FaMinus } from "react-icons/fa6";
 import GoogleMapComponent from "../../components/GoogleMap/GoogleMapComponent";
 import SideBarComponent from "../../components/SideBar/SideBarComponent";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
@@ -126,7 +127,7 @@ function MainPage() {
 						css={s.addPostBtn}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
 					>
-						<FaPlus />
+						{isMenuOpen ? <FaMinus /> : <FaPlus />}
 					</button>
 					<div css={s.menuWrapper(isMenuOpen)}>
 						<button

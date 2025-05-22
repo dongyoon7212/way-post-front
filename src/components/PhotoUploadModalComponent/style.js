@@ -4,12 +4,13 @@ export const modalWrapper = (isOpen) => css`
 	position: fixed;
 	top: 50%;
 	right: ${isOpen ? "10px" : "-35vw"};
+	opacity: ${isOpen ? "1" : "0"};
 	width: 35vw;
 	transform: translateY(-50%);
 	height: 97vh;
 	background-color: white;
 	box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-	transition: right 0.2s ease-in-out;
+	transition: all 0.3s ease-in-out;
 	display: flex;
 	flex-direction: column;
 	padding: 20px 20px 80px 20px;
