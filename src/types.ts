@@ -11,7 +11,13 @@ export interface User {
 	profileImg: string;
 	userRoles: UserRole[];
 	introduce: string;
+}
+
+export interface GetUserResponse {
+	followingCount: number;
+	followerCount: number;
 	isFollowed: number;
+	user: User;
 }
 
 export interface UserRole {

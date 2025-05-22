@@ -3,7 +3,7 @@ import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { PhotoPost, principalData, User } from "../../types";
+import { GetUserResponse, PhotoPost, principalData } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
@@ -33,7 +33,7 @@ function ProfilePage() {
 		"getPrincipal",
 	]);
 	const params = useParams();
-	const [userData, setUserData] = useState<User>();
+	const [userData, setUserData] = useState<GetUserResponse>();
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [isIntroduceModalOpen, setIsIntroduceModalOpen] = useState(false);
 	const [newIntroduce, setNewIntroduce] = useState("");
@@ -43,7 +43,7 @@ function ProfilePage() {
 			getUserById(params.id).then((response) => {
 				const typedResponse = response as {
 					status: number;
-					data: User;
+					data: GetUserResponse;
 				};
 				if (typedResponse.status === 200) {
 					setUserData(typedResponse.data);
@@ -62,7 +62,7 @@ function ProfilePage() {
 	}, []);
 
 	const handleOpenIntroduceModal = () => {
-		setNewIntroduce(userData?.introduce || "");
+		setNewIntroduce(userData?.user.introduce || "");
 		setIsIntroduceModalOpen(true);
 	};
 
@@ -208,15 +208,15 @@ function ProfilePage() {
 					<div css={s.profileImgBox}>
 						<div css={s.imgBox}>
 							<img
-								src={userData?.profileImg}
+								src={userData?.user.profileImg}
 								alt="프로필 이미지"
 							/>
 						</div>
 					</div>
 					<div css={s.profileInfoBox}>
 						<div css={s.profileName}>
-							<span>{userData?.username}</span>
-							{principalData?.data.user.userId === params?.id ? (
+							<span>{userData?.user.username}</span>
+							{principalData?.data.user.userId == params?.id ? (
 								<></>
 							) : (
 								<>
@@ -241,7 +241,7 @@ function ProfilePage() {
 									)}
 								</>
 							)}
-							{principalData?.data.user.userId === params?.id ? (
+							{principalData?.data.user.userId == params?.id ? (
 								<>
 									<button
 										onClick={handleProfileImageClick}
@@ -279,13 +279,13 @@ function ProfilePage() {
 								게시물 <p>{postGroup.length}</p>
 							</span>
 							<span>
-								팔로워 <p>80.5만</p>
+								팔로워 <p>{userData?.followerCount}</p>
 							</span>
 							<span>
-								팔로우 <p>215</p>
+								팔로우 <p>{userData?.followingCount}</p>
 							</span>
 						</div>
-						<div css={s.introduce}>{userData?.introduce}</div>
+						<div css={s.introduce}>{userData?.user.introduce}</div>
 					</div>
 				</div>
 				<div css={s.postLayout}>
