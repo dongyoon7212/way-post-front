@@ -22,7 +22,6 @@ import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 import { IoMdSettings } from "react-icons/io";
 import { instance } from "../../apis/utils/instance";
-import { deactivateAccountRequest } from "../../apis/apis/authApi";
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -175,16 +174,6 @@ function ProfilePage() {
 		}
 	};
 
-	const handleDeactivateAccountClick = () => {
-		// if (window.confirm("정말로 계정을 탈퇴하시겠습니까?")) {
-		// 	if (!principalData) return;
-		// 	deactivateAccountRequest({
-
-		// 	})
-		// }
-		navigate("/deactivate-account");
-	};
-
 	const handleLogoutClick = () => {
 		localStorage.removeItem("accessToken");
 		instance.interceptors.request.use((config) => {
@@ -303,9 +292,9 @@ function ProfilePage() {
 										</button>
 										<button
 											css={s.deleteAccountBtn}
-											onClick={
-												handleDeactivateAccountClick
-											}
+											onClick={() => {
+												navigate("/deactivate-account");
+											}}
 										>
 											<p>계정 탈퇴</p>
 										</button>

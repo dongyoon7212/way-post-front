@@ -69,12 +69,22 @@ function LoginModalComponent({
 						placeholder="이메일"
 						onChange={(e) => setEmail(e.target.value)}
 						value={email}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								signinHandler();
+							}
+						}}
 					/>
 					<input
 						type="password"
 						placeholder="비밀번호"
 						onChange={(e) => setPassword(e.target.value)}
 						value={password}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								signinHandler();
+							}
+						}}
 					/>
 				</div>
 				<div css={s.buttonGroup}>
