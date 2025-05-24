@@ -19,6 +19,7 @@ import LocationSearch, {
 } from "../../components/LocationSearch/LocationSearch";
 import PhotoPostModal from "../../components/PhotoPostModal/PhotoPostModal";
 import { PhotoPost, principalData } from "../../types";
+import { instance } from "../../apis/utils/instance";
 
 function MainPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,6 +40,31 @@ function MainPage() {
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
+
+	useEffect(() => {
+		if (principalData) {
+			if (principalData.data.user.isEnabled === 0) {
+				if (
+					window.confirm(
+						"비활성화된 계정입니다. 비활성화된 계정을 복구하시겠습니까?"
+					)
+				) {
+					navigate("/activate-account");
+				} else {
+					alert("로그아웃 되었습니다.");
+					localStorage.removeItem("accessToken");
+					instance.interceptors.request.use((config) => {
+						config.headers.Authorization = null;
+						return config;
+					});
+					queryClient.refetchQueries({
+						queryKey: ["getPrincipal"],
+					});
+					window.location.href = "/";
+				}
+			}
+		}
+	}, [principalData]);
 
 	const menuRef = useRef<HTMLDivElement>(null);
 

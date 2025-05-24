@@ -64,6 +64,31 @@ function ProfilePage() {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (principalData) {
+			if (principalData.data.user.isEnabled === 0) {
+				if (
+					window.confirm(
+						"비활성화된 계정입니다. 비활성화된 계정을 복구하시겠습니까?"
+					)
+				) {
+					navigate("/activate-account");
+				} else {
+					alert("로그아웃 되었습니다.");
+					localStorage.removeItem("accessToken");
+					instance.interceptors.request.use((config) => {
+						config.headers.Authorization = null;
+						return config;
+					});
+					queryClient.refetchQueries({
+						queryKey: ["getPrincipal"],
+					});
+					window.location.href = `/profile/${params.id}`;
+				}
+			}
+		}
+	}, [principalData]);
+
 	const handleOpenIntroduceModal = () => {
 		setNewIntroduce(userData?.user.introduce || "");
 		setIsIntroduceModalOpen(true);

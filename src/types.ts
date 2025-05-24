@@ -11,6 +11,8 @@ export interface User {
 	profileImg: string;
 	userRoles: UserRole[];
 	introduce: string;
+	isEnabled: number;
+	dctvdDt: string;
 }
 
 export interface GetUserResponse {

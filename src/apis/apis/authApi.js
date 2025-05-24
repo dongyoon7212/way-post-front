@@ -60,3 +60,13 @@ export const deactivateAccountRequest = async (data) => {
 		return error.response;
 	}
 };
+
+export const activateAccountRequest = async (data) => {
+	try {
+		const response = instance.post("/auth/account/activate", data);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error.response;
+	}
+};

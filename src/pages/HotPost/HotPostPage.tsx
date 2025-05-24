@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import * as s from "./style";
 import logo2 from "../../assets/logo2.png";
 import { useNavigate } from "react-router-dom";
-import { LuAlignJustify } from "react-icons/lu";
 import LoginModalComponent from "../../components/Login/LoginModalComponent";
 import SignUpModalComponent from "../../components/SignUpModalComponent/SignUpModalComponent";
 import { PhotoPost, principalData } from "../../types";
@@ -19,6 +18,7 @@ import { FaComments } from "react-icons/fa6";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import PostPageSkeleton from "../../components/PostPageSkeleton/PostPageSkeleton";
+import { instance } from "../../apis/utils/instance";
 
 function HotPostPage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
@@ -53,6 +53,31 @@ function HotPostPage() {
 				setIsLoading(false);
 			});
 	}, []);
+
+	useEffect(() => {
+		if (principalData) {
+			if (principalData.data.user.isEnabled === 0) {
+				if (
+					window.confirm(
+						"비활성화된 계정입니다. 비활성화된 계정을 복구하시겠습니까?"
+					)
+				) {
+					navigate("/activate-account");
+				} else {
+					alert("비활성화된 계정은 사용하실 수 없습니다.");
+					localStorage.removeItem("accessToken");
+					instance.interceptors.request.use((config) => {
+						config.headers.Authorization = null;
+						return config;
+					});
+					queryClient.refetchQueries({
+						queryKey: ["getPrincipal"],
+					});
+					window.location.href = "/hot-post";
+				}
+			}
+		}
+	}, [principalData]);
 
 	const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setComment(e.target.value);

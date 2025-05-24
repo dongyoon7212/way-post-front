@@ -7,6 +7,7 @@ import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import HotPostPage from "../pages/HotPost/HotPostPage";
 import RecentPostPage from "../pages/RecentPost/RecentPostPage";
 import DeactivateAccountPage from "../pages/DeactivateAccount/DeactivateAccountPage";
+import ActivateAccountPage from "../pages/ActivateAccount/ActivateAccountPage";
 
 function MainRoute() {
 	return (
@@ -21,6 +22,10 @@ function MainRoute() {
 				<Route
 					path="/deactivate-account"
 					element={<DeactivateAccountPage />}
+				/>
+				<Route
+					path="/activate-account"
+					element={<ActivateAccountPage />}
 				/>
 			</Routes>
 		</>

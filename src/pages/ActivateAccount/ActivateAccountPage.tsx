@@ -6,10 +6,10 @@ import logo1 from "../../assets/logo1.png";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { principalData } from "../../types";
-import { deactivateAccountRequest } from "../../apis/apis/authApi";
+import { activateAccountRequest } from "../../apis/apis/authApi";
 import { instance } from "../../apis/utils/instance";
 
-function DeactivateAccountPage() {
+function ActivateAccountPage() {
 	const navigate = useNavigate();
 	const [password, setPassword] = useState<string>("");
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,19 +20,19 @@ function DeactivateAccountPage() {
 		"getPrincipal",
 	]);
 
-	const handleDeactivateClick = () => {
-		if (window.confirm("정말로 계정을 비활성화 하시겠습니까?")) {
+	const handleActivateClick = () => {
+		if (window.confirm("정말로 계정을 복구하시겠습니까?")) {
 			if (!password) {
 				alert("비밀번호를 입력해주세요.");
 				return;
 			}
-			deactivateAccountRequest({
+			activateAccountRequest({
 				email: principalData?.data.user.email,
 				password: password,
 			})
 				.then((response) => {
 					if (response.status === 200) {
-						alert("계정이 비활성화 되었습니다.");
+						alert("계정이 복구 되었습니다. 다시 로그인 해주세요.");
 						localStorage.removeItem("accessToken");
 						instance.interceptors.request.use((config) => {
 							config.headers.Authorization = null;
@@ -75,12 +75,12 @@ function DeactivateAccountPage() {
 					<div css={s.mainBox}>
 						<div css={s.titleBox}>
 							<img src={logo1} alt="logo" />
-							<h1>계정 탈퇴</h1>
+							<h1>계정 복구</h1>
 							<p>
-								해당 계정은 탈퇴 전 <span>비활성화 상태</span>로
-								전환됩니다.
+								비활성화 상태의 계정을 <span>복구</span>
+								합니다.
 								<br />
-								30일이 지나면 계정 탈퇴가 완전히 이루어집니다.
+								복구된 계정은 데이터가 모두 복구됩니다.
 							</p>
 						</div>
 						<input
@@ -92,10 +92,10 @@ function DeactivateAccountPage() {
 						/>
 						<div css={s.buttonBox}>
 							<button
-								css={s.deactivateButton}
-								onClick={handleDeactivateClick}
+								css={s.activateButton}
+								onClick={handleActivateClick}
 							>
-								비활성화
+								복구하기
 							</button>
 						</div>
 					</div>
@@ -105,4 +105,4 @@ function DeactivateAccountPage() {
 	);
 }
 
-export default DeactivateAccountPage;
+export default ActivateAccountPage;
