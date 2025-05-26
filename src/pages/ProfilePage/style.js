@@ -308,6 +308,11 @@ export const follow = css`
 			font-weight: 600;
 		}
 	}
+
+	& > span:nth-of-type(2),
+	span:nth-of-type(3) {
+		cursor: pointer;
+	}
 `;
 
 export const introduce = css`
