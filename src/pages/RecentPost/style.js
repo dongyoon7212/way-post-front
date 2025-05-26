@@ -127,6 +127,24 @@ export const username = css`
 	color: #262626;
 `;
 
+export const postTime = css`
+	font-size: 14px;
+	color: #8e8e8e;
+	cursor: default;
+	margin-left: 12px;
+`;
+
+export const postLocation = css`
+	width: 22vw;
+	text-align: end;
+	font-size: 14px;
+	color: #262626;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: default;
+`;
+
 // 2. Post image
 export const postImage = css`
 	width: 100%;
@@ -146,7 +164,13 @@ export const btnBox = css`
 	padding: 12px;
 	display: flex;
 	align-items: center;
-	& > p {
+	justify-content: space-between;
+	& > div {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+	& > div > p {
 		font-size: 20px;
 		margin-right: 15px;
 		display: flex;

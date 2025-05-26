@@ -70,10 +70,6 @@ export const profileBox = css`
 	& > img {
 		cursor: pointer;
 	}
-
-	& > span {
-		cursor: pointer;
-	}
 `;
 
 export const dropdownBtn = css`
@@ -125,6 +121,25 @@ export const avatar = css`
 export const username = css`
 	font-weight: 600;
 	color: #262626;
+	cursor: pointer;
+`;
+
+export const postTime = css`
+	font-size: 14px;
+	color: #8e8e8e;
+	cursor: default;
+	margin-left: 12px;
+`;
+
+export const postLocation = css`
+	width: 22vw;
+	text-align: end;
+	font-size: 14px;
+	color: #262626;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: default;
 `;
 
 // 2. Post image
@@ -146,7 +161,13 @@ export const btnBox = css`
 	padding: 12px;
 	display: flex;
 	align-items: center;
-	& > p {
+	justify-content: space-between;
+	& > div {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+	& > div > p {
 		font-size: 20px;
 		margin-right: 15px;
 		display: flex;

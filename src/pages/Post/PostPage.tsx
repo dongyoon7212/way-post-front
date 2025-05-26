@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
-import { LuAlignJustify } from "react-icons/lu";
 import { FaComments } from "react-icons/fa6";
 import logo2 from "../../assets/logo2.png";
 import { useEffect, useRef, useState } from "react";
@@ -205,6 +204,28 @@ function PostPage() {
 		e.preventDefault();
 	};
 
+	const formatTimeFromNow = (dateInput: string | Date): string => {
+		const date = new Date(dateInput);
+		const now = new Date();
+		const diffMs = now.getTime() - date.getTime();
+		const diffSec = Math.floor(diffMs / 1000);
+		const diffMin = Math.floor(diffSec / 60);
+		const diffHour = Math.floor(diffMin / 60);
+
+		if (diffHour < 24) {
+			if (diffHour >= 1) return `${diffHour}시간 전`;
+			if (diffMin >= 1) return `${diffMin}분 전`;
+			return `방금 전`;
+		}
+
+		// 24시간 이상일 경우 날짜 출력
+		const year = date.getFullYear();
+		const month = (date.getMonth() + 1).toString().padStart(2, "0");
+		const day = date.getDate().toString().padStart(2, "0");
+
+		return `${year}.${month}.${day}`;
+	};
+
 	return (
 		<div css={s.layout}>
 			{isLoginOpen && (
@@ -271,6 +292,9 @@ function PostPage() {
 										>
 											{post.user.username}
 										</span>
+										<span css={s.postTime}>
+											{formatTimeFromNow(post.regDt)}
+										</span>
 									</div>
 									{principalData?.data.user.userId ===
 										post.userId && (
@@ -313,48 +337,53 @@ function PostPage() {
 									/>
 								</div>
 								<div css={s.btnBox}>
-									<p>
-										{post.isLiked === 1 ? (
-											<IoMdHeart
-												onClick={() =>
-													toggleLikeClick(
-														post.photoPostId
-													)
-												}
+									<div>
+										<p>
+											{post.isLiked === 1 ? (
+												<IoMdHeart
+													onClick={() =>
+														toggleLikeClick(
+															post.photoPostId
+														)
+													}
+													style={{
+														marginRight: "5px",
+														cursor: "pointer",
+														color: "#FF3B30",
+														fontSize: "1.3rem",
+													}}
+												/>
+											) : (
+												<IoMdHeartEmpty
+													onClick={() =>
+														toggleLikeClick(
+															post.photoPostId
+														)
+													}
+													style={{
+														marginRight: "5px",
+														cursor: "pointer",
+														color: "#bfbfbf",
+														fontSize: "1.3rem",
+													}}
+												/>
+											)}
+											{post.likeCount}
+										</p>
+										<p>
+											<FaComments
 												style={{
-													marginRight: "5px",
-													cursor: "pointer",
-													color: "#FF3B30",
+													marginRight: "7px",
+													color: "#656565",
 													fontSize: "1.3rem",
 												}}
 											/>
-										) : (
-											<IoMdHeartEmpty
-												onClick={() =>
-													toggleLikeClick(
-														post.photoPostId
-													)
-												}
-												style={{
-													marginRight: "5px",
-													cursor: "pointer",
-													color: "#bfbfbf",
-													fontSize: "1.3rem",
-												}}
-											/>
-										)}
-										{post.likeCount}
-									</p>
-									<p>
-										<FaComments
-											style={{
-												marginRight: "7px",
-												color: "#656565",
-												fontSize: "1.3rem",
-											}}
-										/>
-										{post.comments.length}
-									</p>
+											{post.comments.length}
+										</p>
+									</div>
+									<span css={s.postLocation}>
+										{post.locationAddress}
+									</span>
 								</div>
 								<div css={s.postCaption}>
 									<strong
