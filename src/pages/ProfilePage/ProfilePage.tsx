@@ -3,7 +3,7 @@ import * as s from "./style";
 import { LuAlignJustify } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { GetUserResponse, PhotoPost, principalData } from "../../types";
+import { GetUserResponse, PhotoPost, principalData, User } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../apis/firebase/firebaseConfig";
@@ -13,6 +13,8 @@ import {
 	editIntroduce,
 	editProfileImg,
 	follow,
+	getFollowerList,
+	getFollowingList,
 	getUserById,
 	unfollow,
 } from "../../apis/apis/accountApi";
@@ -40,6 +42,11 @@ function ProfilePage() {
 	const [postGroup, setPostGroup] = useState<PhotoPost[]>([]);
 	const [isIntroduceModalOpen, setIsIntroduceModalOpen] = useState(false);
 	const [newIntroduce, setNewIntroduce] = useState("");
+	const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
+	const [followModalType, setFollowModalType] = useState<
+		"follower" | "following" | null
+	>(null);
+	const [followList, setFollowList] = useState<User[]>([]);
 
 	useEffect(() => {
 		if (params.id) {
@@ -210,6 +217,30 @@ function ProfilePage() {
 		window.location.href = "/";
 	};
 
+	const handleOpenFollowModal = (type: "follower" | "following") => {
+		if (!params.id) return;
+
+		if (type === "follower") {
+			setFollowModalType(type);
+			setIsFollowModalOpen(true);
+			getFollowerList(parseInt(params.id)).then((res) => {
+				const typedRes = res as { status: number; data: User[] };
+				if (typedRes.status === 200) {
+					setFollowList(typedRes.data);
+				}
+			});
+		} else if (type === "following") {
+			setFollowModalType(type);
+			setIsFollowModalOpen(true);
+			getFollowingList(parseInt(params.id)).then((res) => {
+				const typedRes = res as { status: number; data: User[] };
+				if (typedRes.status === 200) {
+					setFollowList(typedRes.data);
+				}
+			});
+		}
+	};
+
 	return (
 		<div css={s.layout}>
 			{isLoginOpen && (
@@ -339,10 +370,18 @@ function ProfilePage() {
 							<span>
 								게시물 <p>{postGroup.length}</p>
 							</span>
-							<span>
+							<span
+								onClick={() =>
+									handleOpenFollowModal("follower")
+								}
+							>
 								팔로워 <p>{userData?.followerCount}</p>
 							</span>
-							<span>
+							<span
+								onClick={() =>
+									handleOpenFollowModal("following")
+								}
+							>
 								팔로우 <p>{userData?.followingCount}</p>
 							</span>
 						</div>
@@ -393,6 +432,44 @@ function ProfilePage() {
 							</button>
 							<button onClick={handleSaveIntroduce}>저장</button>
 						</div>
+					</div>
+				</div>
+			)}
+			{isFollowModalOpen && (
+				<div
+					css={s.overlay}
+					onClick={() => setIsFollowModalOpen(false)}
+				>
+					<div css={s.modalBox} onClick={(e) => e.stopPropagation()}>
+						<h3>
+							{followModalType === "follower"
+								? "팔로워 목록"
+								: "팔로우 목록"}
+						</h3>
+						<div css={s.userList}>
+							{followList.map((user) => (
+								<div
+									key={user.userId}
+									css={s.userItem}
+									onClick={() =>
+										(window.location.href = `/profile/${user.userId}`)
+									}
+								>
+									<img
+										src={user.profileImg}
+										alt="유저 이미지"
+										css={s.userImg}
+									/>
+									<span>{user.username}</span>
+								</div>
+							))}
+						</div>
+						<button
+							css={s.closeButton}
+							onClick={() => setIsFollowModalOpen(false)}
+						>
+							닫기
+						</button>
 					</div>
 				</div>
 			)}

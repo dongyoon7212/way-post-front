@@ -44,3 +44,25 @@ export const unfollow = async (data) => {
 		return error;
 	}
 };
+
+export const getFollowerList = async (data) => {
+	try {
+		const response = instance.get(
+			`/account/get/followerList?userId=${data}`
+		);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const getFollowingList = async (data) => {
+	try {
+		const response = instance.get(
+			`/account/get/followingList?userId=${data}`
+		);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

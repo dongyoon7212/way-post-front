@@ -331,3 +331,65 @@ export const postBox = css`
 	position: relative;
 	overflow: hidden;
 `;
+
+export const overlay = css`
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+`;
+
+export const modalBox = css`
+	background-color: #fff;
+	border-radius: 16px;
+	padding: 20px;
+	width: 90%;
+	max-width: 400px;
+	max-height: 70vh;
+	overflow-y: auto;
+	animation: ${slideUp} 0.3s ease-in-out;
+`;
+
+export const userList = css`
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-top: 16px;
+`;
+
+export const userItem = css`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+	&:hover {
+		background-color: #f7f7f7;
+	}
+`;
+
+export const userImg = css`
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+`;
+
+export const closeButton = css`
+	margin-top: 16px;
+	width: 100%;
+	padding: 8px;
+	background-color: #1e90ff;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+`;
