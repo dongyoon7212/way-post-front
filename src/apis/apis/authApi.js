@@ -70,3 +70,13 @@ export const activateAccountRequest = async (data) => {
 		return error.response;
 	}
 };
+
+export const emailCertificationRequest = async () => {
+	try {
+		const response = instance.post("/mail/send");
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error.response;
+	}
+};

@@ -43,6 +43,17 @@ function MainPage() {
 
 	useEffect(() => {
 		if (principalData) {
+			if (principalData.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+				}
+			}
 			if (principalData.data.user.isEnabled === 0) {
 				if (
 					window.confirm(

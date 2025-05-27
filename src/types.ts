@@ -26,12 +26,15 @@ export interface UserRole {
 	userId: number;
 	roleId: number;
 	userRoleId: number;
+	regDt: string;
+	updDt: string;
 	role: Role;
 }
 
 export interface Role {
 	roleId: number;
 	roleName: string;
+	roleNameKor: string;
 }
 
 export interface Metadata {

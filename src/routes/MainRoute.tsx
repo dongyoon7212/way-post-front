@@ -8,6 +8,7 @@ import HotPostPage from "../pages/HotPost/HotPostPage";
 import RecentPostPage from "../pages/RecentPost/RecentPostPage";
 import DeactivateAccountPage from "../pages/DeactivateAccount/DeactivateAccountPage";
 import ActivateAccountPage from "../pages/ActivateAccount/ActivateAccountPage";
+import MailCertificationPage from "../pages/MailCertification/MailCertificationPage";
 
 function MainRoute() {
 	return (
@@ -26,6 +27,10 @@ function MainRoute() {
 				<Route
 					path="/activate-account"
 					element={<ActivateAccountPage />}
+				/>
+				<Route
+					path="/mail-certification"
+					element={<MailCertificationPage />}
 				/>
 			</Routes>
 		</>
