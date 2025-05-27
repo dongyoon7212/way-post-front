@@ -6,7 +6,10 @@ import logo1 from "../../assets/logo1.png";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { principalData } from "../../types";
-import { emailCertificationRequest } from "../../apis/apis/authApi";
+import {
+	emailVerificationCodeCheckRequest,
+	emailVerificationCodeSendRequest,
+} from "../../apis/apis/emailApi";
 
 function MailCertificationPage() {
 	const navigate = useNavigate();
@@ -36,13 +39,57 @@ function MailCertificationPage() {
 			navigate("/");
 			return;
 		}
-		emailCertificationRequest().then((response) => {
+		emailVerificationCodeSendRequest({
+			email: principalData.data.user.email,
+			userId: principalData.data.user.userId,
+		}).then((response) => {
 			if (response.status === 200) {
 				alert("인증코드가 발송되었습니다. 이메일을 확인해주세요.");
 			} else {
 				alert("인증코드 발송에 실패했습니다. 다시 시도해주세요.");
 			}
 		});
+	};
+
+	const handleCheckCode = () => {
+		if (!certificationCode) {
+			alert("인증코드를 입력해주세요.");
+			return;
+		}
+		emailVerificationCodeCheckRequest({
+			userId: principalData?.data.user.userId,
+			code: certificationCode,
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					if (response.data.code === 2000) {
+						alert("인증이 완료되었습니다.");
+						navigate("/");
+					} else if (response.data.code === 4001) {
+						alert("잘못된 요청입니다.");
+						navigate("/");
+					} else if (response.data.code === 4002) {
+						alert(
+							"인증 코드가 만료되었습니다. 다시 인증을 시도해주세요."
+						);
+						setCertificationCode("");
+					} else if (response.data.code === 4003) {
+						alert(
+							"인증 가능 횟수 초과입니다. 나중에 인증을 시도해주세요."
+						);
+						navigate("/");
+					} else if (response.data.code === 4004) {
+						alert(
+							"인증 코드가 일치하지 않습니다. 다시 확인해주세요."
+						);
+						setCertificationCode("");
+					}
+				}
+			})
+			.catch((error) => {
+				console.error("인증 코드 확인 중 오류 발생:", error);
+				alert("인증 코드 확인에 실패했습니다. 다시 시도해주세요.");
+			});
 	};
 
 	return (
@@ -86,7 +133,7 @@ function MailCertificationPage() {
 						<div css={s.buttonBox}>
 							<button
 								css={s.activateButton}
-								// onClick={handleSendClick}
+								onClick={handleCheckCode}
 							>
 								인증하기
 							</button>
