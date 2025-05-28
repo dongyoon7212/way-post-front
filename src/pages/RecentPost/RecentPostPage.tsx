@@ -93,6 +93,19 @@ function RecentPostPage() {
 				alert("댓글을 입력해주세요.");
 				return;
 			}
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					setComment("");
+					return;
+				}
+			}
 			addComment({
 				photoPostId: photoPostId,
 				userId: userId,
@@ -135,6 +148,18 @@ function RecentPostPage() {
 				setIsLoginOpen(true);
 				return;
 			}
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					return;
+				}
+			}
 			removeLike({
 				userId: principalData.data.user.userId,
 				photoPostId: postId,
@@ -153,6 +178,18 @@ function RecentPostPage() {
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
+			}
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					return;
+				}
 			}
 			addLike({
 				userId: principalData.data.user.userId,

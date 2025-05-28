@@ -64,7 +64,7 @@ function MailCertificationPage() {
 				if (response.status === 200) {
 					if (response.data.code === 2000) {
 						alert("인증이 완료되었습니다.");
-						navigate("/");
+						window.location.href = "/";
 					} else if (response.data.code === 4001) {
 						alert("잘못된 요청입니다.");
 						navigate("/");

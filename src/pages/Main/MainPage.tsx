@@ -43,17 +43,6 @@ function MainPage() {
 
 	useEffect(() => {
 		if (principalData) {
-			if (principalData.data.user.userRoles[0].roleId === 3) {
-				if (
-					window.confirm(
-						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
-					)
-				) {
-					navigate("/mail-certification");
-				} else {
-					alert("서비스 이용이 제한될 수 있습니다.");
-				}
-			}
 			if (principalData.data.user.isEnabled === 0) {
 				if (
 					window.confirm(
@@ -78,6 +67,22 @@ function MainPage() {
 	}, [principalData]);
 
 	const menuRef = useRef<HTMLDivElement>(null);
+
+	const checkVerifyAccount = () => {
+		if (principalData?.data.user.userRoles[0].roleId === 3) {
+			if (
+				window.confirm(
+					"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+				)
+			) {
+				navigate("/mail-certification");
+			} else {
+				alert("서비스 이용이 제한될 수 있습니다.");
+				return false;
+			}
+		}
+		return true;
+	};
 
 	const handleChangeLocation = (lat: number, lng: number) => {
 		setMarkerPosition({ lat, lng });
@@ -171,7 +176,9 @@ function MainPage() {
 							css={s.menuItem}
 							onClick={() => {
 								if (principalData) {
-									setIsUploadModalOpen(true);
+									setIsUploadModalOpen(
+										checkVerifyAccount() ? true : false
+									);
 								} else {
 									alert("로그인 후 사용 가능합니다.");
 									setIsLoginOpen(true);

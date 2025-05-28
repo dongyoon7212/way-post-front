@@ -179,6 +179,18 @@ function ProfilePage() {
 			setIsLoginOpen(true);
 			return;
 		}
+		if (principalData?.data.user.userRoles[0].roleId === 3) {
+			if (
+				window.confirm(
+					"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+				)
+			) {
+				navigate("/mail-certification");
+			} else {
+				alert("서비스 이용이 제한될 수 있습니다.");
+				return;
+			}
+		}
 		if (params.id) {
 			follow({ followeeId: params.id }).then((response) => {
 				const typedResponse = response as {
@@ -193,6 +205,23 @@ function ProfilePage() {
 	};
 
 	const handleUnfollowClick = () => {
+		if (!principalData) {
+			alert("로그인 후 사용해주세요.");
+			setIsLoginOpen(true);
+			return;
+		}
+		if (principalData?.data.user.userRoles[0].roleId === 3) {
+			if (
+				window.confirm(
+					"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+				)
+			) {
+				navigate("/mail-certification");
+			} else {
+				alert("서비스 이용이 제한될 수 있습니다.");
+				return;
+			}
+		}
 		if (params.id) {
 			unfollow({ followeeId: params.id }).then((response) => {
 				const typedResponse = response as {
@@ -239,6 +268,10 @@ function ProfilePage() {
 				}
 			});
 		}
+	};
+
+	const handleVerifyAccountClick = () => {
+		navigate("/mail-certification");
 	};
 
 	return (
@@ -360,6 +393,19 @@ function ProfilePage() {
 										>
 											<p>로그아웃</p>
 										</button>
+										{principalData?.data.user.userRoles[0]
+											.roleId === 3 ? (
+											<button
+												css={s.verifyAccountBtn}
+												onClick={
+													handleVerifyAccountClick
+												}
+											>
+												<p>이메일 인증</p>
+											</button>
+										) : (
+											<></>
+										)}
 									</div>
 								</>
 							) : (

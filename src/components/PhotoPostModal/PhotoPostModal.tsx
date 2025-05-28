@@ -13,6 +13,7 @@ import {
 } from "../../apis/apis/postApi";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { FaComments } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
 	isOpen: boolean;
@@ -31,6 +32,7 @@ function PhotoPostModal({ isOpen, onClose, position, setIsLoginOpen }: Props) {
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (isOpen) {
@@ -67,6 +69,19 @@ function PhotoPostModal({ isOpen, onClose, position, setIsLoginOpen }: Props) {
 			alert("로그인 후 댓글을 작성해주세요.");
 			setIsLoginOpen(true);
 		} else {
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					setComment("");
+					return;
+				}
+			}
 			if (comment.trim() === "") {
 				alert("댓글을 입력해주세요.");
 				return;
@@ -86,6 +101,18 @@ function PhotoPostModal({ isOpen, onClose, position, setIsLoginOpen }: Props) {
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
+			}
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					return;
+				}
 			}
 			removeLike({
 				userId: principalData.data.user.userId,
@@ -108,6 +135,18 @@ function PhotoPostModal({ isOpen, onClose, position, setIsLoginOpen }: Props) {
 			if (!principalData) {
 				setIsLoginOpen(true);
 				return;
+			}
+			if (principalData?.data.user.userRoles[0].roleId === 3) {
+				if (
+					window.confirm(
+						"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."
+					)
+				) {
+					navigate("/mail-certification");
+				} else {
+					alert("서비스 이용이 제한될 수 있습니다.");
+					return;
+				}
 			}
 			addLike({
 				userId: principalData.data.user.userId,
