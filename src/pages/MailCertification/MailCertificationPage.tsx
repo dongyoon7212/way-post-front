@@ -14,6 +14,8 @@ import {
 function MailCertificationPage() {
 	const navigate = useNavigate();
 	const [certificationCode, setCertificationCode] = useState<string>("");
+	const [countdown, setCountdown] = useState<number>(0);
+	const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 	const handleCertificationCodeChange = (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -23,6 +25,12 @@ function MailCertificationPage() {
 	const principalData = queryClient.getQueryData<principalData>([
 		"getPrincipal",
 	]);
+
+	useEffect(() => {
+		return () => {
+			if (timerId) clearInterval(timerId);
+		};
+	}, [timerId]);
 
 	useEffect(() => {
 		if (principalData) {
@@ -45,6 +53,18 @@ function MailCertificationPage() {
 		}).then((response) => {
 			if (response.status === 200) {
 				alert("인증코드가 발송되었습니다. 이메일을 확인해주세요.");
+				setCountdown(120); // 5분
+				if (timerId) clearInterval(timerId);
+				const id = setInterval(() => {
+					setCountdown((prev) => {
+						if (prev <= 1) {
+							clearInterval(id);
+							return 0;
+						}
+						return prev - 1;
+					});
+				}, 1000);
+				setTimerId(id);
 			} else {
 				alert("인증코드 발송에 실패했습니다. 다시 시도해주세요.");
 			}
@@ -119,8 +139,19 @@ function MailCertificationPage() {
 						</div>
 						<div css={s.emailBox}>
 							<span>{principalData?.data.user.email}</span>
-							<button css={s.sendBtn} onClick={handleSendClick}>
-								인증받기
+							<button
+								css={[
+									s.sendBtn,
+									countdown > 0 && s.disabledBtn,
+								]}
+								disabled={countdown > 0}
+								onClick={handleSendClick}
+							>
+								{countdown > 0
+									? `${Math.floor(countdown / 60)}:${String(
+											countdown % 60
+									  ).padStart(2, "0")}`
+									: "인증요청"}
 							</button>
 						</div>
 						<input

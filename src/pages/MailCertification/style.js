@@ -85,11 +85,11 @@ export const titleBox = css`
 	}
 `;
 
-export const emailBox =css`
-    display: flex;
-    align-items: center;
-    margin: 30px 0;
-`
+export const emailBox = css`
+	display: flex;
+	align-items: center;
+	margin: 30px 0;
+`;
 
 export const sendBtn = css`
 	margin-left: 10px;
@@ -107,6 +107,11 @@ export const sendBtn = css`
 	&:active {
 		background-color: rgb(39, 132, 190);
 	}
+`;
+
+export const disabledBtn = css`
+	opacity: 0.6;
+	cursor: not-allowed;
 `;
 
 export const codeInput = css`
