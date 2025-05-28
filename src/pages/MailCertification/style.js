@@ -115,11 +115,32 @@ export const disabledBtn = css`
 `;
 
 export const codeInput = css`
-	border: 1px solid #dbdbdb;
-	border-radius: 10px;
-	width: 45%;
-	padding: 12px 20px;
-	margin: 10px 0;
+	width: 100%;
+	max-width: 240px;
+	padding: 12px 18px;
+	font-size: 16px;
+	font-weight: bolder;
+	/* font-family: "Courier New", Courier, monospace; */
+	caret-color: transparent;
+	letter-spacing: 6px;
+	text-align: center;
+	border: 2px solid #1e90ff;
+	border-radius: 8px;
+	outline: none;
+	background-color: #f9f9f9;
+	color: #1e1e1e;
+	box-shadow: 0 0 0 3px transparent;
+	transition: all 0.2s ease;
+
+	&::placeholder {
+		letter-spacing: normal;
+		color: #bbb;
+	}
+
+	&:focus {
+		background-color: #fff;
+		box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.3);
+	}
 `;
 
 export const buttonBox = css`
