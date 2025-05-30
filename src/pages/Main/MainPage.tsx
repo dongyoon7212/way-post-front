@@ -159,7 +159,7 @@ function MainPage() {
 					}
 				>
 					{principalData ? (
-						<img src={principalData.data.user.profileImg} />
+						<img src={principalData?.data?.user?.profileImg} />
 					) : (
 						<IoMdLogIn size={24} />
 					)}

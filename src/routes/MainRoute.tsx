@@ -9,6 +9,7 @@ import RecentPostPage from "../pages/RecentPost/RecentPostPage";
 import DeactivateAccountPage from "../pages/DeactivateAccount/DeactivateAccountPage";
 import ActivateAccountPage from "../pages/ActivateAccount/ActivateAccountPage";
 import MailCertificationPage from "../pages/MailCertification/MailCertificationPage";
+import OAuth2Page from "../pages/OAuth2/OAuth2Page";
 
 function MainRoute() {
 	return (
@@ -32,6 +33,7 @@ function MainRoute() {
 					path="/mail-certification"
 					element={<MailCertificationPage />}
 				/>
+				<Route path="/auth/oauth2" element={<OAuth2Page />} />
 			</Routes>
 		</>
 	);
