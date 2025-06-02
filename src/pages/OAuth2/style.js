@@ -44,36 +44,71 @@ export const logoBox = css`
 `;
 
 export const mainLayout = css`
-	width: 37vw;
+	width: 45vw;
 	min-height: 92vh;
 	margin-top: 8vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	& > h1 {
+		font-size: 30px;
+		font-weight: bold;
+		margin-bottom: 50px;
+		color: #333;
+	}
+
+	& > p {
+		font-size: 16px;
+		font-weight: 500;
+		color: #666;
+		margin-bottom: 60px;
+		line-height: 1.5;
+	}
 `;
 
 export const mainBox = css`
 	width: 100%;
-	height: 35vh;
+	height: 25vh;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 `;
 
 export const selectBox = css`
-	width: 15vw;
+	box-sizing: border-box;
+	width: 20vw;
 	height: 25vh;
 	border-radius: 10px;
-	border: 1px solid #dbdbdb;
-	background-color: rgb(240, 233, 225);
+	background-color: rgb(92, 193, 237);
 	font-family: "SpoqaHanSansNeo-Bold";
+	padding: 20px;
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 
-	& > img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		border-radius: 10px;
-		cursor: pointer;
+	& > h1 {
+		font-size: 20px;
+		margin-bottom: 20px;
+		font-weight: bold;
+	}
+
+	& > p {
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 20px;
+		line-height: 1.2;
+		word-break: keep-all;
+	}
+
+	& > div {
+		display: flex;
+		justify-content: end;
+	}
+
+	&:hover {
+		background-color: rgb(52, 162, 220);
+		box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
 	}
 `;

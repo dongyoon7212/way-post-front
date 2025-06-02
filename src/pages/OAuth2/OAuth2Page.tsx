@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import * as s from "./style";
 import logo2 from "../../assets/logo2.png";
-import mergeIcon from "../../assets/mergeIcon.png";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 function OAuth2Page() {
 	const navigate = useNavigate();
@@ -22,7 +22,7 @@ function OAuth2Page() {
 			</header>
 			<main>
 				<div css={s.mainLayout}>
-					<h1>소셜 로그인 옵션</h1>
+					<h1>소셜 로그인</h1>
 					<p>
 						선택한 소셜 계정(Google/Naver/Kakao)은 WayPost 계정과
 						아직 연동되지 않았습니다.
@@ -36,6 +36,13 @@ function OAuth2Page() {
 								기존 Way Post 계정이 있다면, 해당 계정과 지금의
 								소셜 계정을 연동할 수 있습니다.
 							</p>
+							<div>
+								<FaRegArrowAltCircleRight
+									style={{
+										fontSize: 28,
+									}}
+								/>
+							</div>
 						</div>
 						<div css={s.selectBox}>
 							<h1>처음 이용하시나요?</h1>
@@ -43,6 +50,13 @@ function OAuth2Page() {
 								아직 Way Post 계정이 없다면, 지금 사용하는 소셜
 								계정으로 새 계정을 만들 수 있습니다.
 							</p>
+							<div>
+								<FaRegArrowAltCircleRight
+									style={{
+										fontSize: 28,
+									}}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
