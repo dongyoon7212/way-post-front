@@ -29,7 +29,7 @@ export const modal = css`
 	background: white;
 	padding: 30px;
 	border-radius: 20px;
-	width: 30vw;
+	width: 24vw;
 	box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 	display: flex;
 	flex-direction: column;
@@ -54,7 +54,8 @@ export const closeBtn = css`
 `;
 
 export const logo = css`
-	width: 80%;
+	width: 30%;
+	margin-bottom: 20px;
 `;
 
 export const inputBox = css`

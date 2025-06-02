@@ -65,51 +65,62 @@ export const mainLayout = css`
 		color: #666;
 		margin-bottom: 60px;
 		line-height: 1.5;
-	}
-`;
-
-export const mainBox = css`
-	width: 100%;
-	height: 25vh;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-`;
-
-export const selectBox = css`
-	box-sizing: border-box;
-	max-width: 18vw;
-	height: auto;
-	border-radius: 10px;
-	background-color: rgb(92, 193, 237);
-	font-family: "SpoqaHanSansNeo-Bold";
-	padding: 20px;
-	color: white;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-
-	& > h1 {
-		font-size: 20px;
-		margin-bottom: 20px;
-		font-weight: bold;
-	}
-
-	& > p {
-		font-size: 16px;
-		font-weight: 500;
-		margin-bottom: 30px;
-		line-height: 1.2;
 		word-break: keep-all;
 	}
+`;
 
-	& > div {
-		display: flex;
-		justify-content: end;
-		align-items: end;
+export const inputBox = css`
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	width: 18vw;
+	margin: 20px 0;
+	border-radius: 15px;
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background: #f9f9f9;
+
+	& > input {
+		box-sizing: border-box;
+		padding: 12px;
+		border: none;
+		outline: none;
+		width: 100%;
+		font-size: 16px;
+
+		&:first-of-type {
+			border-bottom: 1px solid #ccc;
+		}
+	}
+`;
+
+export const buttonBox = css`
+	width: 18vw;
+	display: flex;
+	justify-content: space-between;
+
+	& > button {
+		padding: 10px 15px;
+		border: none;
+		border-radius: 10px;
+		background-color: transparent;
+		font-size: 14px;
+		font-weight: bolder;
+		color: rgb(89, 89, 89);
+		cursor: pointer;
+		transition: all 0.2s ease;
 	}
 
-	&:hover {
+	& > button:nth-of-type(1):hover {
+		background-color: #dbdbdb;
+	}
+
+	& > button:nth-of-type(2) {
 		background-color: rgb(52, 162, 220);
-		box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+		color: white;
+	}
+
+	& > button:nth-of-type(2):hover {
+		background-color: rgb(42, 142, 200);
 	}
 `;

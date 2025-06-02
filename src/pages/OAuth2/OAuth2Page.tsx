@@ -24,13 +24,16 @@ function OAuth2Page() {
 				<div css={s.mainLayout}>
 					<h1>소셜 로그인</h1>
 					<p>
-						선택한 소셜 계정(Google/Naver/Kakao)은 WayPost 계정과
+						선택한 소셜 계정(Google/Naver/Kakao)은 Way Post 계정과
 						아직 연동되지 않았습니다.
 						<br />
 						아래 중 하나를 선택해 주세요.
 					</p>
 					<div css={s.mainBox}>
-						<div css={s.selectBox}>
+						<div
+							css={s.selectBox}
+							onClick={() => navigate("/auth/oauth2/merge")}
+						>
 							<h1>기존 계정이 있으신가요?</h1>
 							<p>
 								기존 Way Post 계정이 있다면, 해당 계정과 지금의

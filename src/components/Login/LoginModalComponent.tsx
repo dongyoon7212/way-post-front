@@ -61,7 +61,7 @@ function LoginModalComponent({
 				</button>
 				<img src={logo2} css={s.logo} />
 				<h2>로그인</h2>
-				{/* <p>Way-Post에 오신 것을 환영합니다</p> */}
+				<p>Way Post에 오신 것을 환영합니다.</p>
 				<div css={s.inputBox}>
 					<input
 						type="text"

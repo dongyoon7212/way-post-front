@@ -10,6 +10,7 @@ import DeactivateAccountPage from "../pages/DeactivateAccount/DeactivateAccountP
 import ActivateAccountPage from "../pages/ActivateAccount/ActivateAccountPage";
 import MailCertificationPage from "../pages/MailCertification/MailCertificationPage";
 import OAuth2Page from "../pages/OAuth2/OAuth2Page";
+import OAuth2MergePage from "../pages/OAuth2Merge/OAuth2MergePage";
 
 function MainRoute() {
 	return (
@@ -34,6 +35,10 @@ function MainRoute() {
 					element={<MailCertificationPage />}
 				/>
 				<Route path="/auth/oauth2" element={<OAuth2Page />} />
+				<Route
+					path="/auth/oauth2/merge"
+					element={<OAuth2MergePage />}
+				/>
 			</Routes>
 		</>
 	);
