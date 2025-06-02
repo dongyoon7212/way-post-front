@@ -5,6 +5,8 @@ import { Reset } from "styled-reset";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GlobalStyle } from "./GlobalStyle";
+import "./index.css";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -17,6 +19,7 @@ root.render(
 		<RecoilRoot>
 			<BrowserRouter>
 				<Reset />
+				<GlobalStyle />
 				<App />
 			</BrowserRouter>
 		</RecoilRoot>
