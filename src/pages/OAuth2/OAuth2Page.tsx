@@ -1,11 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
 import logo2 from "../../assets/logo2.png";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 function OAuth2Page() {
 	const navigate = useNavigate();
+	const params = new URLSearchParams(window.location.search);
+	const provider = params.get("provider");
+	const providerUserId = params.get("providerUserId");
 	return (
 		<div css={s.layout}>
 			<header css={s.headerLayout}>
@@ -32,7 +35,11 @@ function OAuth2Page() {
 					<div css={s.mainBox}>
 						<div
 							css={s.selectBox}
-							onClick={() => navigate("/auth/oauth2/merge")}
+							onClick={() =>
+								navigate(
+									`/auth/oauth2/merge?provider=${provider}&providerUserId=${providerUserId}`
+								)
+							}
 						>
 							<h1>기존 계정이 있으신가요?</h1>
 							<p>
