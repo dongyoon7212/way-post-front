@@ -12,6 +12,7 @@ import MailCertificationPage from "../pages/MailCertification/MailCertificationP
 import OAuth2Page from "../pages/OAuth2/OAuth2Page";
 import OAuth2MergePage from "../pages/OAuth2Merge/OAuth2MergePage";
 import OAuth2SigninRedirectPage from "../pages/OAuth2SigninRedirect/OAuth2SigninRedirectPage";
+import OAuth2SignupPage from "../pages/OAuth2Signup/OAuth2SignupPage";
 
 function MainRoute() {
 	return (
@@ -43,6 +44,10 @@ function MainRoute() {
 				<Route
 					path="/auth/oauth2/signin"
 					element={<OAuth2SigninRedirectPage />}
+				/>
+				<Route
+					path="/auth/oauth2/signup"
+					element={<OAuth2SignupPage />}
 				/>
 			</Routes>
 		</>

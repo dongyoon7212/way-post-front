@@ -46,7 +46,7 @@ export const logoBox = css`
 export const mainLayout = css`
 	width: 45vw;
 	min-height: 92vh;
-	margin-top: 8vh;
+	margin-top: 4vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

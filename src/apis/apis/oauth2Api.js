@@ -10,4 +10,12 @@ export const oauth2MergeRequest = async (data) => {
 	}
 };
 
-export const oauth2SignupRequest = async (data) => {};
+export const oauth2SignupRequest = async (data) => {
+	try {
+		const response = instance.post("/auth/oauth/signup", data);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error.response;
+	}
+};

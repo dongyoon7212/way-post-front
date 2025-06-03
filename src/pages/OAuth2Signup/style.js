@@ -69,12 +69,16 @@ export const mainLayout = css`
 	}
 `;
 
+export const inputContainer = css`
+	width: 25vw;
+`;
+
 export const inputBox = css`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	width: 18vw;
-	margin: 20px 0;
+	width: 100%;
+	margin-bottom: 20px;
 	border-radius: 15px;
 	overflow: hidden;
 	border: 1px solid #ccc;
@@ -82,7 +86,7 @@ export const inputBox = css`
 
 	& > input {
 		box-sizing: border-box;
-		padding: 12px;
+		padding: 14px 20px;
 		border: none;
 		outline: none;
 		width: 100%;
@@ -94,33 +98,56 @@ export const inputBox = css`
 	}
 `;
 
-export const buttonBox = css`
-	width: 18vw;
+export const inputWrapper = css`
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
 	display: flex;
-	justify-content: space-between;
+	align-items: center;
+`;
 
-	& > button {
-		padding: 10px 15px;
-		border: none;
-		border-radius: 10px;
-		background-color: transparent;
-		font-size: 14px;
-		font-weight: bolder;
-		color: rgb(89, 89, 89);
-		cursor: pointer;
-		transition: all 0.2s ease;
+export const chkInput = css`
+	width: 100%;
+	padding: 14px 85px 14px 20px; /* 오른쪽 패딩 추가 */
+	border: 1px solid #ccc;
+	border-radius: 15px;
+	font-size: 16px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+`;
+
+export const checkBtn = css`
+	position: absolute;
+	top: 42%;
+	right: 10px;
+	transform: translateY(-50%);
+	padding: 5px 10px;
+	border: none;
+	background-color: #1e90ff;
+	color: white;
+	font-size: 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+
+	&:hover {
+		background-color: #0073e6;
 	}
+`;
 
-	& > button:nth-of-type(1):hover {
-		background-color: #dbdbdb;
-	}
+export const submitBtn = css`
+	width: 100%;
+	padding: 10px;
+	border: none;
+	border-radius: 10px;
+	background: #1e90ff;
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+	margin: 10px 0;
+	transition: background-color 0.2s;
 
-	& > button:nth-of-type(2) {
-		background-color: rgb(52, 162, 220);
-		color: white;
-	}
-
-	& > button:nth-of-type(2):hover {
-		background-color: rgb(42, 142, 200);
+	&:hover {
+		background-color: #0f70d6;
 	}
 `;

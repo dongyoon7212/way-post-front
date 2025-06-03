@@ -121,7 +121,6 @@ function LoginModalComponent({
 						onClick={() => {
 							window.location.href =
 								"http://localhost:8080/oauth2/authorization/google";
-							// 구글 로그인 페이지로 리다이렉트
 						}}
 					>
 						<FcGoogle />

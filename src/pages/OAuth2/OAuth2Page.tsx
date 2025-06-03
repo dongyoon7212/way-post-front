@@ -9,6 +9,7 @@ function OAuth2Page() {
 	const params = new URLSearchParams(window.location.search);
 	const provider = params.get("provider");
 	const providerUserId = params.get("providerUserId");
+	const email = params.get("email") || "";
 	return (
 		<div css={s.layout}>
 			<header css={s.headerLayout}>
@@ -54,7 +55,14 @@ function OAuth2Page() {
 								/>
 							</div>
 						</div>
-						<div css={s.selectBox}>
+						<div
+							css={s.selectBox}
+							onClick={() =>
+								navigate(
+									`/auth/oauth2/signup?provider=${provider}&providerUserId=${providerUserId}&email=${email}`
+								)
+							}
+						>
 							<h1>처음 이용하시나요?</h1>
 							<p>
 								아직 Way Post 계정이 없다면, 지금 사용하는 소셜
