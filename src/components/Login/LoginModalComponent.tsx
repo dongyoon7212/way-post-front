@@ -91,11 +91,23 @@ function LoginModalComponent({
 					<div css={s.divider}>
 						<span>또는</span>
 					</div>
-					<button css={s.loginButton}>
+					<button
+						css={s.loginButton}
+						onClick={() => {
+							window.location.href =
+								"http://localhost:8080/oauth2/authorization/naver";
+						}}
+					>
 						<SiNaver style={{ color: "rgb(3, 199, 91)" }} />
 						<span>네이버로 로그인하기</span>
 					</button>
-					<button css={s.loginButton}>
+					<button
+						css={s.loginButton}
+						onClick={() => {
+							window.location.href =
+								"http://localhost:8080/oauth2/authorization/kakao";
+						}}
+					>
 						<SiKakaotalk
 							style={{
 								color: "rgb(255, 232, 16)",
