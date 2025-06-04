@@ -8,6 +8,7 @@ import { PhotoPost, principalData } from "../../types";
 import {
 	addComment,
 	addLike,
+	editPhotoPostText,
 	getPhotoPostListByUserId,
 	removeLike,
 	removePhotoPost,
@@ -30,6 +31,9 @@ function PostPage() {
 	const [expandedComments, setExpandedComments] = useState<Set<number>>(
 		new Set()
 	);
+	const [isPostEditModalOpen, setIsPostEditModalOpen] = useState(false);
+	const [editPostId, setEditPostId] = useState<number | null>(null);
+	const [newPost, setNewPost] = useState("");
 
 	const menuRef = useRef<HTMLDivElement>(null);
 	const queryClient = useQueryClient();
@@ -263,6 +267,46 @@ function PostPage() {
 		return `${year}.${month}.${day}`;
 	};
 
+	const handleEditModalOpen = (postId: number) => {
+		setEditPostId(postId);
+		setIsPostEditModalOpen(true);
+	};
+
+	const handleSavePostEdit = () => {
+		if (newPost.trim() === "") {
+			alert("게시물 내용을 입력해주세요.");
+			return;
+		}
+
+		editPhotoPostText({
+			photoPostId: editPostId,
+			text: newPost,
+		}).then((response) => {
+			const typedResponse = response as {
+				status: number;
+			};
+			if (typedResponse.status === 200) {
+				alert("게시물이 수정되었습니다.");
+				setIsPostEditModalOpen(false);
+				setNewPost("");
+				// 게시물 목록을 다시 불러오기
+				getPhotoPostListByUserId(parseInt(params.id ?? "0")).then(
+					(response) => {
+						const typedResponse = response as {
+							status: number;
+							data: PhotoPost[];
+						};
+						if (typedResponse.status === 200) {
+							setPostGroup(typedResponse.data);
+						}
+					}
+				);
+			} else {
+				alert("게시물 수정에 실패했습니다.");
+			}
+		});
+	};
+
 	return (
 		<div css={s.layout}>
 			{isLoginOpen && (
@@ -351,7 +395,15 @@ function PostPage() {
 									)}
 									{openMenuId === post.photoPostId && (
 										<div css={s.dropdownMenu} ref={menuRef}>
-											<button css={s.dropdownItem}>
+											<button
+												css={s.dropdownItem}
+												onClick={() => {
+													handleEditModalOpen(
+														post.photoPostId
+													);
+													setNewPost(post.postText);
+												}}
+											>
 												수정
 											</button>
 											<button
@@ -489,6 +541,40 @@ function PostPage() {
 								</form>
 							</article>
 					  ))}
+				{isPostEditModalOpen && (
+					<div
+						css={s.bottomOverlay}
+						onClick={() => setIsPostEditModalOpen(false)}
+					>
+						<div
+							css={s.bottomModal}
+							onClick={
+								(e) =>
+									e.stopPropagation() /* 배경 클릭 시 닫히지만, 모달 내부 클릭은 전파 방지 */
+							}
+						>
+							<h3>게시물 수정</h3>
+							<textarea
+								css={s.introTextarea}
+								value={newPost}
+								onChange={(e) => setNewPost(e.target.value)}
+								rows={4}
+							/>
+							<div css={s.modalButtons}>
+								<button
+									onClick={() =>
+										setIsPostEditModalOpen(false)
+									}
+								>
+									취소
+								</button>
+								<button onClick={handleSavePostEdit}>
+									저장
+								</button>
+							</div>
+						</div>
+					</div>
+				)}
 			</main>
 		</div>
 	);

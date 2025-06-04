@@ -136,7 +136,10 @@ function PhotoUploadModalComponent({
 			alert("파일을 선택해 주세요.");
 			return;
 		}
-		console.log(selectedFile);
+		if (!postText.trim()) {
+			alert("게시글 내용을 입력해 주세요.");
+			return;
+		}
 		const storageRef = ref(
 			storage,
 			`post-img/${uuid()}_${selectedFile.name.split(".").pop()}`

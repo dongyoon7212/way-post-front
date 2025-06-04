@@ -1,4 +1,9 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
+
+const slideUp = keyframes`
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+`;
 
 export const layout = css`
 	position: relative;
@@ -249,5 +254,69 @@ export const commentButton = css`
 	&:disabled {
 		opacity: 0.4;
 		cursor: default;
+	}
+`;
+
+export const bottomOverlay = css`
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+`;
+
+export const bottomModal = css`
+	width: 100%;
+	max-width: 400px;
+	background: white;
+	border-radius: 8px;
+	padding: 20px;
+	animation: ${slideUp} 0.3s ease-in-out;
+`;
+
+export const introTextarea = css`
+	width: 100%;
+	min-height: 100px;
+	max-height: 200px;
+	box-sizing: border-box;
+	margin-top: 10px;
+	resize: vertical;
+	border: 1px solid #dbdbdb;
+	padding: 10px;
+	font-family: "SpoqaHanSansNeo";
+
+	&:focus {
+		outline: none;
+	}
+`;
+
+export const modalButtons = css`
+	margin-top: 12px;
+	text-align: right;
+
+	& > button {
+		margin-left: 10px;
+		padding: 7px 16px;
+		background-color: white;
+		border: 1px solid #dbdbdb;
+		border-radius: 5px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		font-size: 12px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #f0f0f0;
+		}
+	}
+	& > button:last-of-type {
+		background-color: #007bff;
+		color: white;
+		border: none;
+
+		&:hover {
+			background-color: #0056b3;
+		}
 	}
 `;

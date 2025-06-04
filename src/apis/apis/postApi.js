@@ -91,3 +91,12 @@ export const getPhotoPostListByPosition = async (params) => {
 		return error;
 	}
 };
+
+export const editPhotoPostText = async (data) => {
+	try {
+		const response = instance.post("/post/photo/edit/text", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
