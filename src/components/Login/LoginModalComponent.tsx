@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import logo2 from "../../assets/logo2.png";
 import React, { useState } from "react";
 import { signinRequest } from "../../apis/apis/authApi";
+import { useNavigate } from "react-router-dom";
 
 function LoginModalComponent({
 	isOpen,
@@ -18,7 +19,7 @@ function LoginModalComponent({
 }) {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
-
+	const navigate = useNavigate();
 	const filedInit = () => {
 		setEmail("");
 		setPassword("");
@@ -85,6 +86,16 @@ function LoginModalComponent({
 							}
 						}}
 					/>
+				</div>
+				<div css={s.findPasswordBox}>
+					<p
+						css={s.findPassword}
+						onClick={() => {
+							navigate("/auth/forgot-password");
+						}}
+					>
+						비밀번호를 잊으셨나요?
+					</p>
 				</div>
 				<div css={s.buttonGroup}>
 					<button onClick={signinHandler}>계속</button>

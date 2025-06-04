@@ -83,6 +83,24 @@ export const inputBox = css`
 	}
 `;
 
+export const findPasswordBox = css`
+	width: 100%;
+	display: flex;
+	justify-content: end;
+	margin-bottom: 20px;
+`;
+
+export const findPassword = css`
+	font-size: 14px;
+	font-weight: 600;
+	color: #1e90ff;
+	cursor: pointer;
+	transition: color 0.2s;
+	&:hover {
+		color: #187bcd;
+	}
+`;
+
 export const buttonGroup = css`
 	display: flex;
 	flex-direction: column; /* 버튼 세로 정렬 */
