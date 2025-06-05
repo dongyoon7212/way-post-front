@@ -45,7 +45,6 @@ function ActivateAccountPage() {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 					if (error.status !== 200) {
 						alert("사용자 정보가 알맞지 않습니다.");
 						setPassword("");

@@ -31,7 +31,6 @@ const LocationSearch = forwardRef<LocationSearchRef, LocationSearchProps>(
 		const onPlaceChanged = () => {
 			if (autocomplete) {
 				const place = autocomplete.getPlace();
-				console.log(place);
 				if (place.geometry && place.geometry.location) {
 					const location: Location = {
 						lat: place.geometry.location.lat(),

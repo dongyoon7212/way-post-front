@@ -152,13 +152,13 @@ function MainPage() {
 						principalData
 							? () => {
 									navigate(
-										`/profile/${principalData.data.user.userId}`
+										`/profile/${principalData?.data?.user?.userId}`
 									);
 							  }
 							: () => setIsLoginOpen(true)
 					}
 				>
-					{principalData ? (
+					{principalData !== null ? (
 						<img src={principalData?.data?.user?.profileImg} />
 					) : (
 						<IoMdLogIn size={24} />

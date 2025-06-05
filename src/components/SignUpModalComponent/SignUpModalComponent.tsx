@@ -78,7 +78,6 @@ function SignUpModalComponent({
 			username: username,
 		})
 			.then((response) => {
-				console.log(response);
 				if (response.status === 200) {
 					alert("회원가입 완료");
 					filedInit();
@@ -87,7 +86,6 @@ function SignUpModalComponent({
 				}
 			})
 			.catch((error) => {
-				console.log(error.response.data);
 				if (error.response.status === 400) {
 				}
 			});
@@ -100,7 +98,6 @@ function SignUpModalComponent({
 		}
 		usernameDuplChkRequest(username)
 			.then((response) => {
-				console.log(response);
 				if (response.status === 200) {
 					if (response.data === 0) {
 						alert("사용가능한 이름입니다.");
@@ -112,7 +109,6 @@ function SignUpModalComponent({
 				}
 			})
 			.catch((error) => {
-				console.log(error.response.data);
 				if (error.response.status === 400) {
 				}
 			});
@@ -125,7 +121,6 @@ function SignUpModalComponent({
 		}
 		emailDuplChkRequest(email)
 			.then((response) => {
-				console.log(response);
 				if (response.status === 200) {
 					if (response.data === 0) {
 						alert("사용가능한 이메일입니다.");
@@ -137,7 +132,6 @@ function SignUpModalComponent({
 				}
 			})
 			.catch((error) => {
-				console.log(error.response.data);
 				if (error.response.status === 400) {
 				}
 			});

@@ -190,7 +190,6 @@ function PhotoUploadModalComponent({
 							}
 						})
 						.catch((error) => {
-							console.log(error.response.data);
 							if (error.response.status === 400) {
 							}
 						});

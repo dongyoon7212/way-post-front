@@ -74,7 +74,6 @@ function ForgotPasswordPage() {
 							css={s.activateButton}
 							disabled={false} // 여기에 인증 코드 확인 로직 추가 필요
 							onClick={() => {
-								console.log("비밀번호 변경");
 								navigate("/auth/new-password");
 							}}
 						>

@@ -73,7 +73,7 @@ function ProfilePage() {
 
 	useEffect(() => {
 		if (principalData) {
-			if (principalData.data.user.isEnabled === 0) {
+			if (principalData?.data?.user?.isEnabled === 0) {
 				if (
 					window.confirm(
 						"비활성화된 계정입니다. 비활성화된 계정을 복구하시겠습니까?"
@@ -104,7 +104,6 @@ function ProfilePage() {
 	// 모달에서 “저장” 클릭
 	const handleSaveIntroduce = () => {
 		if (!principalData) return;
-		console.log("저장 클릭", newIntroduce);
 		editIntroduce({ introduce: newIntroduce }).then((response) => {
 			if ((response as { status: number }).status === 200) {
 				setUserData((u) => (u ? { ...u, introduce: newIntroduce } : u));
@@ -149,7 +148,7 @@ function ProfilePage() {
 			() => {
 				getDownloadURL(fileRef).then((url) => {
 					editProfileImg({
-						userId: principalData?.data?.user.userId,
+						userId: principalData?.data?.user?.userId,
 						profileImg: url,
 					})
 						.then((response) => {
@@ -163,7 +162,6 @@ function ProfilePage() {
 							}
 						})
 						.catch((error) => {
-							console.log(error.response.data);
 							if (error.response.status === 400) {
 							}
 						});
@@ -315,8 +313,8 @@ function ProfilePage() {
 					</div>
 					<div css={s.profileInfoBox}>
 						<div css={s.profileName}>
-							<span>{userData?.user.username}</span>
-							{principalData?.data.user.userId == params?.id ? (
+							<span>{userData?.user?.username}</span>
+							{principalData?.data?.user?.userId == params?.id ? (
 								<></>
 							) : (
 								<>
@@ -341,7 +339,7 @@ function ProfilePage() {
 									)}
 								</>
 							)}
-							{principalData?.data.user.userId == params?.id ? (
+							{principalData?.data?.user?.userId == params?.id ? (
 								<>
 									<button
 										css={s.settingBtn}
@@ -440,7 +438,7 @@ function ProfilePage() {
 							css={s.postBox}
 							key={post.photoPostId || index}
 							onClick={() =>
-								handleCardClick(post.userId, post.photoPostId)
+								handleCardClick(post?.userId, post.photoPostId)
 							}
 						>
 							<PhotoPostSkeleton
@@ -495,7 +493,7 @@ function ProfilePage() {
 						<div css={s.userList}>
 							{followList.map((user) => (
 								<div
-									key={user.userId}
+									key={user?.userId}
 									css={s.userItem}
 									onClick={() =>
 										(window.location.href = `/profile/${user.userId}`)

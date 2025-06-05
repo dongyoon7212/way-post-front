@@ -53,7 +53,6 @@ function OAuth2SignupPage() {
 		}
 		usernameDuplChkRequest(username)
 			.then((response) => {
-				console.log(response);
 				if (response.status === 200) {
 					if (response.data === 0) {
 						alert("사용가능한 이름입니다.");
@@ -65,7 +64,6 @@ function OAuth2SignupPage() {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response.data);
 				if (error.response.status === 400) {
 				}
 			});
@@ -94,7 +92,6 @@ function OAuth2SignupPage() {
 			providerUserId: providerUserId || "",
 		})
 			.then((response) => {
-				console.log(response);
 				// if (response.status === 200) {
 				// 	alert("회원가입 완료");
 				// }
@@ -107,7 +104,6 @@ function OAuth2SignupPage() {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response.data);
 				if (error.response.status === 400) {
 				}
 			});
