@@ -43,7 +43,7 @@ function MainPage() {
 
 	useEffect(() => {
 		if (principalData) {
-			if (principalData.data.user.isEnabled === 0) {
+			if (principalData?.data?.user?.isEnabled === 0) {
 				if (
 					window.confirm(
 						"비활성화된 계정입니다. 비활성화된 계정을 복구하시겠습니까?"
@@ -69,7 +69,7 @@ function MainPage() {
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	const checkVerifyAccount = () => {
-		if (principalData?.data.user.userRoles[0].roleId === 3) {
+		if (principalData?.data?.user?.userRoles[0]?.roleId === 3) {
 			if (
 				window.confirm(
 					"정상적인 서비스를 위해서는 이메일 인증이 필요합니다."

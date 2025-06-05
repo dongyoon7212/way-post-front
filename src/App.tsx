@@ -12,7 +12,7 @@ function App() {
 
 	return (
 		<div>
-			<MainRoute />
+			{isLoading || <MainRoute />}
 		</div>
 	);
 }

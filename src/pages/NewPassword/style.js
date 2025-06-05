@@ -68,43 +68,27 @@ export const mainLayout = css`
 	}
 `;
 
-export const inputWrapper = css`
-	position: relative;
+export const inputBox = css`
 	box-sizing: border-box;
 	display: flex;
-	align-items: center;
-`;
-
-export const chkInput = css`
-	width: 100%;
-	padding: 14px 85px 14px 20px; /* 오른쪽 패딩 추가 */
-	border: 1px solid #ccc;
-	border-radius: 15px;
-	font-size: 16px;
-	margin-bottom: 10px;
-	box-sizing: border-box;
-`;
-
-export const inputContainer = css`
 	width: 20vw;
-`;
+	flex-direction: column;
+	border-radius: 15px;
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background: #f9f9f9;
 
-export const checkBtn = css`
-	position: absolute;
-	top: 42%;
-	right: 10px;
-	transform: translateY(-50%);
-	padding: 7px 12px;
-	border: none;
-	background-color: #1e90ff;
-	color: white;
-	font-size: 12px;
-	border-radius: 10px;
-	cursor: pointer;
-	transition: background-color 0.3s;
+	& > input {
+		box-sizing: border-box;
+		padding: 12px;
+		border: none;
+		outline: none;
+		width: 100%;
+		font-size: 16px;
 
-	&:hover {
-		background-color: #0073e6;
+		&:first-of-type {
+			border-bottom: 1px solid #ccc;
+		}
 	}
 `;
 
