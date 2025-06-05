@@ -53,7 +53,7 @@ function MailCertificationPage() {
 		}).then((response) => {
 			if (response.status === 200) {
 				alert("인증코드가 발송되었습니다. 이메일을 확인해주세요.");
-				setCountdown(120); // 5분
+				setCountdown(120);
 				if (timerId) clearInterval(timerId);
 				const id = setInterval(() => {
 					setCountdown((prev) => {

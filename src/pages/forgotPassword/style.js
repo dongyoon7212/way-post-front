@@ -86,7 +86,7 @@ export const chkInput = css`
 `;
 
 export const inputContainer = css`
-	width: 20vw;
+	width: 18vw;
 `;
 
 export const checkBtn = css`
@@ -99,12 +99,47 @@ export const checkBtn = css`
 	background-color: #1e90ff;
 	color: white;
 	font-size: 12px;
-	border-radius: 10px;
+	border-radius: 15px;
 	cursor: pointer;
 	transition: background-color 0.3s;
 
 	&:hover {
 		background-color: #0073e6;
+	}
+`;
+
+export const disabledBtn = css`
+	opacity: 0.6;
+	cursor: not-allowed;
+`;
+
+export const codeInput = css`
+	width: 100%;
+	max-width: 240px;
+	padding: 12px 18px;
+	font-size: 16px;
+	font-weight: bolder;
+	/* font-family: "Courier New", Courier, monospace; */
+	caret-color: transparent;
+	letter-spacing: 6px;
+	text-align: center;
+	border: 2px solid #1e90ff;
+	border-radius: 15px;
+	outline: none;
+	background-color: #f9f9f9;
+	color: #1e1e1e;
+	box-shadow: 0 0 0 3px transparent;
+	transition: all 0.2s ease;
+	margin-bottom: 40px;
+
+	&::placeholder {
+		letter-spacing: normal;
+		color: #bbb;
+	}
+
+	&:focus {
+		background-color: #fff;
+		box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.3);
 	}
 `;
 
@@ -115,7 +150,7 @@ export const buttonBox = css`
 	align-items: center;
 `;
 
-export const activateButton = css`
+export const certificationButton = css`
 	width: 40%;
 	border-radius: 10px;
 	border: none;
