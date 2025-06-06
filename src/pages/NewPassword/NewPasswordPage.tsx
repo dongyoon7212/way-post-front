@@ -3,6 +3,7 @@ import * as s from "./style";
 import logo2 from "../../assets/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { newPasswordRequest } from "../../apis/apis/authApi";
 
 function NewPasswordPage() {
 	const [password, setPassword] = useState<string>("");
@@ -35,6 +36,26 @@ function NewPasswordPage() {
 			);
 			return;
 		}
+		newPasswordRequest({
+			newPassword: password,
+		})
+			.then((response: any) => {
+				if (response.status === 200) {
+					if (response.data.code === 2000) {
+						alert(response.data.message);
+						window.location.href = "/";
+					}
+				}
+			})
+			.catch((error) => {
+				if (error.response && error.response.status === 400) {
+					alert("비밀번호 변경에 실패했습니다. 다시 시도해 주세요.");
+				} else {
+					alert(
+						"비밀번호 변경 중 오류가 발생했습니다. 다시 시도해 주세요."
+					);
+				}
+			});
 	};
 
 	return (

@@ -75,3 +75,11 @@ export const activateAccountRequest = async (data) => {
 	}
 };
 
+export const newPasswordRequest = async (data) => {
+	try {
+		const response = instance.post("/auth/new-password", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};

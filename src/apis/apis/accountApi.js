@@ -66,3 +66,4 @@ export const getFollowingList = async (data) => {
 		return error;
 	}
 };
+
