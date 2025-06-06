@@ -20,6 +20,23 @@ function NewPasswordPage() {
 		setIsPasswordValid(passwordRegEx.test(value)); // 입력 즉시 정규식 확인
 	};
 
+	const handlePasswordConfirmChange = () => {
+		if (password === "" || passwordConfirm === "") {
+			alert("비밀번호와 비밀번호 확인을 모두 입력해 주세요.");
+			return;
+		}
+		if (password !== passwordConfirm) {
+			alert("비밀번호가 일치하지 않습니다.");
+			return;
+		}
+		if (!isPasswordValid) {
+			alert(
+				"비밀번호는 영문 소문자, 영문 대문자, 특수문자를 각각 최소 1자 이상 포함하여 8자 이상 20자 이하만 가능합니다."
+			);
+			return;
+		}
+	};
+
 	return (
 		<div css={s.layout}>
 			<header css={s.headerLayout}>
@@ -50,34 +67,36 @@ function NewPasswordPage() {
 					<div css={s.inputBox}>
 						<input
 							type="password"
-							placeholder="비밀번호"
+							placeholder="새로운 비밀번호"
 							value={password}
 							onChange={handlePasswordChange}
 						/>
 						<input
 							type="password"
-							placeholder="비밀번호 확인"
+							placeholder="새로운 비밀번호 확인"
 							value={passwordConfirm}
 							onChange={(e) => setPasswordConfirm(e.target.value)}
 						/>
 					</div>
 					<p
 						style={{
+							marginTop: "20px",
 							color: "red",
 							opacity: isPasswordValid === false ? 1 : 0,
 							transition: "opacity 0.3s ease",
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
 						}}
 					>
 						비밀번호는 영문 소문자, 영문 대문자, 특수문자를 각각
+						<br />
 						최소 1자 이상 포함하여 8자 이상 20자 이하만 가능합니다.
 					</p>
 					<div css={s.buttonBox}>
 						<button
-							css={s.activateButton}
-							disabled={false} // 여기에 인증 코드 확인 로직 추가 필요
-							onClick={() => {
-								navigate("/auth/new-password");
-							}}
+							css={s.confirmButton}
+							onClick={handlePasswordConfirmChange}
 						>
 							비밀번호 변경
 						</button>

@@ -51,6 +51,10 @@ export const mainLayout = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	border-right: 1px solid #dbdbdb;
+	border-left: 1px solid #dbdbdb;
+	box-sizing: border-box;
+	padding: 0 20px;
 
 	& > h1 {
 		font-size: 30px;
@@ -86,7 +90,7 @@ export const chkInput = css`
 `;
 
 export const inputContainer = css`
-	width: 18vw;
+	width: 20vw;
 `;
 
 export const checkBtn = css`

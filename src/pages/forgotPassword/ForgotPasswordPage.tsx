@@ -76,6 +76,10 @@ function ForgotPasswordPage() {
 				if (response.status === 200) {
 					if (response.data.code === 2000) {
 						alert("인증이 완료되었습니다.");
+						localStorage.setItem(
+							"tempToken",
+							response.data.tempToken
+						);
 						navigate("/auth/new-password");
 					} else if (response.data.code === 4001) {
 						alert("잘못된 요청입니다.");
@@ -159,6 +163,9 @@ function ForgotPasswordPage() {
 							opacity: isEmailValid === false ? 1 : 0,
 							transition: "opacity 0.3s ease",
 							marginBottom: "10px",
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
 						}}
 					>
 						올바른 이메일 형식이 아닙니다.

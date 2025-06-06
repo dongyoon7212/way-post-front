@@ -51,6 +51,10 @@ export const mainLayout = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	border-right: 1px solid #dbdbdb;
+	border-left: 1px solid #dbdbdb;
+	box-sizing: border-box;
+	padding: 0 60px;
 
 	& > h1 {
 		font-size: 30px;
@@ -99,7 +103,7 @@ export const buttonBox = css`
 	align-items: center;
 `;
 
-export const activateButton = css`
+export const confirmButton = css`
 	width: 40%;
 	border-radius: 10px;
 	border: none;
@@ -112,4 +116,9 @@ export const activateButton = css`
 	&:hover {
 		background-color: #0073e6;
 	}
+`;
+
+export const disabledBtn = css`
+	opacity: 0.6;
+	cursor: not-allowed;
 `;
