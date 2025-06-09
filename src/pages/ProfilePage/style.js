@@ -112,6 +112,7 @@ export const profileName = css`
 	& > span {
 		font-size: 20px;
 		font-weight: 500;
+		cursor: default;
 	}
 `;
 
@@ -337,6 +338,7 @@ export const follow = css`
 	& > span {
 		display: flex;
 		font-size: 18px;
+		cursor: default;
 
 		& > p {
 			margin-left: 10px;
@@ -354,6 +356,7 @@ export const follow = css`
 export const introduce = css`
 	width: 100%;
 	height: 50%;
+	cursor: default;
 `;
 
 export const postLayout = css`
