@@ -37,11 +37,16 @@ function LoginModalComponent({
 		})
 			.then((response) => {
 				if (response.status === 200) {
+					if (!response.data.accessToken) {
+						alert("사용자 정보가 알맞지 않습니다.");
+						filedInit();
+						return;
+					}
 					window.localStorage.setItem(
 						"accessToken",
 						response.data.accessToken
 					);
-					// window.location.reload();
+					window.location.reload();
 				}
 			})
 			.catch((error) => {
