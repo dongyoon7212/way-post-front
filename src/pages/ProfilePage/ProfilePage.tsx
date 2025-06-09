@@ -378,6 +378,16 @@ function ProfilePage() {
 											<p>소개 변경</p>
 										</button>
 										<button
+											css={s.changePwBtn}
+											onClick={() => {
+												navigate(
+													"/auth/change-password"
+												);
+											}}
+										>
+											<p>비밀번호 변경</p>
+										</button>
+										<button
 											css={s.deleteAccountBtn}
 											onClick={() => {
 												navigate("/deactivate-account");

@@ -3,31 +3,48 @@ import * as s from "./style";
 import logo2 from "../../assets/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { newPasswordRequest } from "../../apis/apis/authApi";
+import { changePasswordRequest } from "../../apis/apis/accountApi";
+import { instance } from "../../apis/utils/instance";
+import { useQueryClient } from "@tanstack/react-query";
 
-function NewPasswordPage() {
+function ChangePasswordPage() {
 	const [password, setPassword] = useState<string>("");
-	const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+	const [newPassword, setNewPassword] = useState<string>("");
+	const [newPasswordConfirm, setNewPasswordConfirm] = useState<string>("");
 	const [isPasswordValid, setIsPasswordValid] = useState<boolean | null>(
 		true
 	);
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,20}$/;
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setPassword(value);
+	};
+
+	const handleNewPasswordChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const value = e.target.value;
+		setNewPassword(value);
 		setIsPasswordValid(passwordRegEx.test(value)); // 입력 즉시 정규식 확인
 	};
 
 	const handlePasswordConfirmChange = () => {
-		if (password === "" || passwordConfirm === "") {
-			alert("비밀번호와 비밀번호 확인을 모두 입력해 주세요.");
+		if (
+			newPassword === "" ||
+			newPasswordConfirm === "" ||
+			password === ""
+		) {
+			alert(
+				"기존 비밀번호와 새로운 비밀번호, 비밀번호 확인을 모두 입력해 주세요."
+			);
 			return;
 		}
-		if (password !== passwordConfirm) {
-			alert("비밀번호가 일치하지 않습니다.");
+		if (newPassword !== newPasswordConfirm) {
+			alert("새로운 비밀번호가 일치하지 않습니다.");
 			return;
 		}
 		if (!isPasswordValid) {
@@ -36,16 +53,21 @@ function NewPasswordPage() {
 			);
 			return;
 		}
-		newPasswordRequest({
-			newPassword: password,
+
+		changePasswordRequest({
+			password: password,
+			newPassword: newPassword,
 		})
 			.then((response: any) => {
 				if (response.status === 200) {
-					if (response.data.code === 2000) {
-						alert(response.data.message);
-						localStorage.removeItem("tempToken");
-						window.location.href = "/";
-					}
+					alert("비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
+					localStorage.removeItem("accessToken");
+					instance.interceptors.request.use((config) => {
+						config.headers.Authorization = null;
+						return config;
+					});
+					queryClient.refetchQueries({ queryKey: ["getPrincipal"] });
+					window.location.href = "/";
 				}
 			})
 			.catch((error) => {
@@ -89,15 +111,25 @@ function NewPasswordPage() {
 					<div css={s.inputBox}>
 						<input
 							type="password"
-							placeholder="새로운 비밀번호"
+							placeholder="기존 비밀번호"
 							value={password}
 							onChange={handlePasswordChange}
+						/>
+					</div>
+					<div css={s.inputBox}>
+						<input
+							type="password"
+							placeholder="새로운 비밀번호"
+							value={newPassword}
+							onChange={handleNewPasswordChange}
 						/>
 						<input
 							type="password"
 							placeholder="새로운 비밀번호 확인"
-							value={passwordConfirm}
-							onChange={(e) => setPasswordConfirm(e.target.value)}
+							value={newPasswordConfirm}
+							onChange={(e) =>
+								setNewPasswordConfirm(e.target.value)
+							}
 						/>
 					</div>
 					<p
@@ -129,4 +161,4 @@ function NewPasswordPage() {
 	);
 }
 
-export default NewPasswordPage;
+export default ChangePasswordPage;

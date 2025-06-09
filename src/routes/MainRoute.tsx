@@ -15,6 +15,7 @@ import OAuth2SigninRedirectPage from "../pages/OAuth2SigninRedirect/OAuth2Signin
 import OAuth2SignupPage from "../pages/OAuth2Signup/OAuth2SignupPage";
 import ForgotPasswordPage from "../pages/ForgotPassword/ForgotPasswordPage";
 import NewPasswordPage from "../pages/NewPassword/NewPasswordPage";
+import ChangePasswordPage from "../pages/ChangePassword/ChangePasswordPage";
 
 function MainRoute() {
 	return (
@@ -58,6 +59,10 @@ function MainRoute() {
 				<Route
 					path="/auth/new-password"
 					element={<NewPasswordPage />}
+				/>
+				<Route
+					path="/auth/change-password"
+					element={<ChangePasswordPage />}
 				/>
 			</Routes>
 		</>

@@ -41,7 +41,7 @@ function LoginModalComponent({
 						"accessToken",
 						response.data.accessToken
 					);
-					window.location.reload();
+					// window.location.reload();
 				}
 			})
 			.catch((error) => {

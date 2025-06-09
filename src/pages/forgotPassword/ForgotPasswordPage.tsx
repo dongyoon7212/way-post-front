@@ -80,7 +80,7 @@ function ForgotPasswordPage() {
 							"tempToken",
 							response.data.tempToken
 						);
-						navigate("/auth/new-password");
+						window.location.href = "/auth/new-password";
 					} else if (response.data.code === 4001) {
 						alert("잘못된 요청입니다.");
 						navigate("/");

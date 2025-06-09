@@ -195,7 +195,7 @@ export const editIntrodueceBtn = css`
 export const verifyAccountBtn = css`
 	position: absolute;
 	width: 100px;
-	top: 140px;
+	top: 175px;
 	right: 0;
 	padding: 7px 16px;
 	background-color: white;
@@ -210,7 +210,7 @@ export const verifyAccountBtn = css`
 	}
 `;
 
-export const deleteAccountBtn = css`
+export const changePwBtn = css`
 	position: absolute;
 	width: 100px;
 	top: 70px;
@@ -228,10 +228,28 @@ export const deleteAccountBtn = css`
 	}
 `;
 
-export const logoutBtn = css`
+export const deleteAccountBtn = css`
 	position: absolute;
 	width: 100px;
 	top: 105px;
+	right: 0;
+	padding: 7px 16px;
+	background-color: white;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 12px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #f0f0f0;
+	}
+`;
+
+export const logoutBtn = css`
+	position: absolute;
+	width: 100px;
+	top: 140px;
 	right: 0;
 	padding: 7px 16px;
 	background-color: white;

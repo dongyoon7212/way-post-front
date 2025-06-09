@@ -67,3 +67,11 @@ export const getFollowingList = async (data) => {
 	}
 };
 
+export const changePasswordRequest = async (data) => {
+	try {
+		const response = instance.post("/account/change-password", data);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
