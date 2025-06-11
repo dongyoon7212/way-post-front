@@ -12,6 +12,8 @@ function NewPasswordPage() {
 		true
 	);
 	const navigate = useNavigate();
+	const param = new URLSearchParams(window.location.search);
+	const email = param.get("email") || "";
 
 	const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,20}$/;
 
@@ -37,15 +39,17 @@ function NewPasswordPage() {
 			return;
 		}
 		newPasswordRequest({
+			email: email,
 			newPassword: password,
 		})
 			.then((response: any) => {
 				if (response.status === 200) {
 					if (response.data.code === 2000) {
 						alert(response.data.message);
-						localStorage.removeItem("tempToken");
-						window.location.href = "/";
+					} else if (response.data.code === 4001) {
+						alert(response.data.message);
 					}
+					window.location.href = "/";
 				}
 			})
 			.catch((error) => {

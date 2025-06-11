@@ -71,34 +71,32 @@ function ForgotPasswordPage() {
 		emailVerificationCodeCheckRequest({
 			email: email,
 			code: certificationCode,
+			purpose: "reset",
 		})
 			.then((response) => {
 				if (response.status === 200) {
 					if (response.data.code === 2000) {
 						alert("인증이 완료되었습니다.");
-						localStorage.setItem(
-							"tempToken",
-							response.data.tempToken
-						);
-						window.location.href = "/auth/new-password";
+						window.location.href =
+							"/auth/new-password?email=" + email;
 					} else if (response.data.code === 4001) {
-						alert("잘못된 요청입니다.");
-						navigate("/");
-					} else if (response.data.code === 4002) {
 						alert(
 							"인증 코드가 만료되었습니다. 다시 인증을 시도해주세요."
 						);
-						setCertificationCode("");
-					} else if (response.data.code === 4003) {
+						window.location.href = "/";
+					} else if (response.data.code === 4002) {
 						alert(
 							"인증 가능 횟수 초과입니다. 나중에 인증을 시도해주세요."
 						);
-						navigate("/");
-					} else if (response.data.code === 4004) {
+						window.location.href = "/";
+					} else if (response.data.code === 4003) {
 						alert(
 							"인증 코드가 일치하지 않습니다. 다시 확인해주세요."
 						);
 						setCertificationCode("");
+					} else if (response.data.code === 4004) {
+						alert("잘못된 접근입니다.");
+						window.location.href = "/";
 					}
 				}
 			})
