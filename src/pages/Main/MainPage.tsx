@@ -187,7 +187,14 @@ function MainPage() {
 						>
 							📷 사진 업로드
 						</button>
-						<button css={s.menuItem}>📝 일정 업로드</button>
+						<button
+							css={s.menuItem}
+							onClick={() => {
+								alert("서비스 준비중입니다.");
+							}}
+						>
+							📝 일정 업로드
+						</button>
 					</div>
 				</div>
 				<PhotoUploadModalComponent
