@@ -13,7 +13,7 @@ import OAuth2Page from "../pages/OAuth2/OAuth2Page";
 import OAuth2MergePage from "../pages/OAuth2Merge/OAuth2MergePage";
 import OAuth2SigninRedirectPage from "../pages/OAuth2SigninRedirect/OAuth2SigninRedirectPage";
 import OAuth2SignupPage from "../pages/OAuth2Signup/OAuth2SignupPage";
-import ForgotPasswordPage from "../pages/ForgotPassword/ForgotPasswordPage";
+import ForgotPasswordPage from "../pages/Forgot-Password/ForgotPasswordPage";
 import NewPasswordPage from "../pages/NewPassword/NewPasswordPage";
 import ChangePasswordPage from "../pages/ChangePassword/ChangePasswordPage";
 
