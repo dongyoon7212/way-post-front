@@ -110,7 +110,7 @@ function LoginModalComponent({
 						css={s.loginButton}
 						onClick={() => {
 							window.location.href =
-								"http://localhost:8080/oauth2/authorization/naver";
+								"https://way-post-back.onrender.com/oauth2/authorization/naver";
 						}}
 					>
 						<SiNaver style={{ color: "rgb(3, 199, 91)" }} />
@@ -120,7 +120,7 @@ function LoginModalComponent({
 						css={s.loginButton}
 						onClick={() => {
 							window.location.href =
-								"http://localhost:8080/oauth2/authorization/kakao";
+								"https://way-post-back.onrender.com/oauth2/authorization/kakao";
 						}}
 					>
 						<SiKakaotalk
@@ -135,7 +135,7 @@ function LoginModalComponent({
 						css={s.loginButton}
 						onClick={() => {
 							window.location.href =
-								"http://localhost:8080/oauth2/authorization/google";
+								"https://way-post-back.onrender.com/oauth2/authorization/google";
 						}}
 					>
 						<FcGoogle />
